@@ -1,0 +1,178 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;1,9..40,400&display=swap');
+
+:root {
+  --sc-bg: #f5f5f5;
+  --sc-bg-200: #dddcdc;
+  --sc-fg-100: #171718;
+  --sc-fg-200: #2f2f30;
+}
+
+.mainContainer {
+  position: relative;
+  width: 100%;
+  background-color: var(--sc-bg);
+  color: var(--sc-fg-100);
+  font-family: "DM Sans", sans-serif;
+  overflow-x: hidden;
+}
+
+.section {
+  position: relative;
+  width: 100vw;
+  height: 100svh;
+  padding: 0.5rem;
+  overflow: hidden;
+}
+
+.revealMessage {
+  position: relative;
+  width: 100%;
+  text-align: left;
+  padding: 5rem 2rem 5rem;
+  font-size: 1.2rem;
+  color: var(--sc-fg-200);
+  font-weight: 500;
+}
+
+.wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.col {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 50%;
+  height: 100%;
+  will-change: transform;
+}
+
+.col2 {
+  transform: translateX(100%);
+}
+
+.col3 {
+  transform: translateX(100%) translateY(100%);
+}
+
+.col4 {
+  transform: translateX(100%) translateY(100%);
+}
+
+.col :global(h1) {
+  color: var(--sc-fg-200);
+  width: 62%;
+  font-size: clamp(1.4rem, 2.2vw, 2.5rem);
+  font-weight: 500;
+  line-height: 1.1;
+  margin: 0;
+}
+
+.col :global(p) {
+  color: var(--sc-fg-100);
+  width: 62%;
+  font-size: clamp(0.8rem, 1vw, 1rem);
+  font-weight: 400;
+  line-height: 1.6;
+  opacity: 0.75;
+  margin: 0;
+}
+
+.content,
+.img {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  padding: 0.5rem;
+}
+
+.imgWrapper,
+.contentWrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 2.5rem;
+  overflow: hidden;
+}
+
+.contentWrapper {
+  background-color: var(--sc-bg-200);
+  /* Use white #ffffff if you want it brighter */
+}
+
+.imgWrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.ccw {
+  padding: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+
+}
+
+.ccw2 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  padding: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.cimg1,
+.cimg2 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.cimg2 {
+  clip-path: polygon(0% 0%, 100% 0%, 100% 0%, 0% 0%);
+}
+
+.cimg2 img {
+  transform: scale(1.25);
+}
+
+/* text split — injected by JS, so must be global */
+:global(.sc-line) {
+  overflow: hidden;
+}
+
+:global(.sc-line span) {
+  display: block;
+  will-change: transform;
+}
+
+@media (max-width: 900px) {
+  .col :global(h1) {
+    font-size: 1.1rem;
+  }
+
+  .col :global(p) {
+    font-size: 0.78rem;
+  }
+
+  .ccw,
+  .ccw2 {
+    padding: 1.5rem;
+  }
+
+  .imgWrapper,
+  .contentWrapper {
+    border-radius: 1.5rem;
+  }
+}
