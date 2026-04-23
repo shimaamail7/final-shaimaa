@@ -26,7 +26,9 @@ const nextConfig = {
     ];
   },
   // Compress responses
-  compress: true,
+  compress: true, 
+  allowedDevOrigins: [ '192.168.0.170' ],
+
 }
 
 export default nextConfig

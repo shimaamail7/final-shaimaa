@@ -10,6 +10,7 @@ import { CraftSection } from "@/components/craft-section"
 import { InnovationSection } from "@/components/innovation-section"
 import { BackgroundGradientAnimation } from "@/components/ui/background-gradient-animation"
 import { Logo } from "@/components/logo"
+import { WebGLErrorBoundary } from "@/components/webgl-error-boundary"
 
 const GlassesCanvas = dynamic(
   () => import("@/components/glasses-model").then((mod) => mod.GlassesCanvas),
@@ -73,10 +74,12 @@ function MainContent({ isReady, onComplete }: { isReady: boolean; onComplete: ()
 
       <div className="relative" id="philosophy">
         <div className="pointer-events-none fixed left-0 top-0 z-30 h-screen w-full">
-          <GlassesCanvas
-            isVisible={isReady}
-            className="h-full w-full"
-          />
+          <WebGLErrorBoundary onError={onComplete}>
+            <GlassesCanvas
+              isVisible={isReady}
+              className="h-full w-full"
+            />
+          </WebGLErrorBoundary>
         </div>
 
         <PhilosophySection />

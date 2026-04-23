@@ -120,7 +120,7 @@ export function Loader({ onComplete, onReady, minimumDuration = 2000 }: LoaderPr
   return (
     <div
       ref={containerRef}
-      className="fixed inset-0 z-50 flex flex-col items-center justify-center overflow-hidden bg-[#000000]"
+      className="fixed inset-0 z-[90] flex flex-col items-center justify-center overflow-hidden bg-[#000000]"
       aria-label="Loading"
       role="progressbar"
       aria-valuenow={progress}
