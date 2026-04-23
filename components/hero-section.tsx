@@ -34,7 +34,7 @@ export function HeroSection({
   ctaHref = "#about"
 }: HeroSectionProps) {
   return (
-    <section className=" relative min-h-screen w-full " style={{ background: ' transparent' }}>
+    <section className=" relative min-h-screen w-full ">
 
       {/* Hero Image - Positioned absolutely to start under the 64px top navigation */}
       <div className="absolute top-0 min-h-screen inset-x-0 bottom-0">
@@ -55,7 +55,7 @@ export function HeroSection({
           <div className="hidden lg:block" />
 
           {/* Text Content */}
-          <div className="z-10 flex flex-col justify-center py-12 sm:py-16 md:py-20 lg:py-0">
+          <div className="z-10 flex flex-col justify-center py-12 md:py-0 pl-0 lg:pl-20 lg:py-0">
             {/* Eyebrow text */}
             {eyebrowText && (
               <p

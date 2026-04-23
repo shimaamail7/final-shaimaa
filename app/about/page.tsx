@@ -7,6 +7,7 @@ import Link from "next/link"
 import { Footer } from "@/components/footer"
 
 import { cn } from "@/lib/utils";
+import { ContactSection } from "@/components/contact-section";
 const navLinks = [
     { href: "/", label: "Home" },
     { href: "/products", label: "Products" },
@@ -394,17 +395,17 @@ export default function AboutPage() {
                 {/* ═══════════════════════════════════════════════════════════════
           DESKTOP: Full-screen height with scroll snap (hidden on mobile/tablet)
       ═══════════════════════════════════════════════════════════════ */}
-                <div className="hidden h-[110vh] bg-[#f5f5f5] overflow-hidden  lg:block" >
+                <div className="hidden   h-[110vh] 2xl:h-screen bg-[#f5f5f5] overflow-hidden  lg:block" >
                     <div
                         ref={desktopScrollRef}
                         className="h-full  scroll-smooth"
                     >
-                        <div className="flex h-full snap-start items-stretch">
+                        <div className="flex h-full  items-stretch">
                             {DEFAULT_CATEGORIES.map((category, index) => (
                                 <div
                                     key={category.id}
                                     className={cn(
-                                        "relative flex flex-1 flex-col snap-center transition-all duration-700",
+                                        "relative flex flex-1 flex-col  transition-all duration-700 ease-in-out hover:bg-white hover:duration-400",
                                         isInView
                                             ? "translate-y-0 opacity-100"
                                             : "translate-y-8 opacity-0",
@@ -412,7 +413,7 @@ export default function AboutPage() {
                                     style={{ transitionDelay: `${index * 150}ms` }}
                                 >
                                     {/* Image - takes most of the height */}
-                                    <div className="relative flex-1 h-[70vh] aspect-[3/4] ">
+                                    <div className="relative h-[70vh] 2xl:h-[80vh] w-full shrink-0 overflow-hidden aspect-3/4 ">
                                         <Image
                                             src={category.image}
                                             alt={category.imageAlt}
@@ -617,7 +618,14 @@ export default function AboutPage() {
 
                         {/* Center Video Section */}
                         <div className="order-first lg:order-none flex-1 min-h-[300px] aspect-video  w-full lg:w-[50%] bg-black">
-                            {/* Video Placeholder */}
+                            <video
+                                src="/transtion.mp4"
+                                autoPlay
+                                loop
+                                muted
+                                playsInline controls={false}
+                                className=" inset-0 h-full w-full object-cover"
+                            />
                         </div>
 
                         {/* Right Column */}
@@ -700,98 +708,7 @@ export default function AboutPage() {
             {/* ═══════════════════════════════════════════════════════════════════════════
           SECTION 8: STILL HAVE QUESTIONS BANNER
       ═══════════════════════════════════════════════════════════════════════════ */}
-            <section className="flex w-full h-[70vh] bg-white flex-col relative ">
-                {/* ── Part 1: Banner with dark overlay ── */}
-                <div className="relative w-full h-full mb-5 overflow-hidden" style={{ minHeight: "clamp(180px, 28vw, 340px)" }}>
-                    {/* Background photo */}
-                    <Image
-                        src="/contact.jpg"
-                        alt="Team members sitting around a table having a discussion"
-                        fill
-                        className="object-cover object-center"
-                        priority={false}
-                    />
-
-                    {/* Dark overlay */}
-                    <div className="absolute inset-0 bg-black/60" />
-
-                    {/* Text content */}
-                    <div className="relative z-10 flex h-full flex-col justify-end px-6 py-10 sm:px-10 md:px-16 lg:px-20 xl:px-24"
-                        style={{ minHeight: "clamp(180px, 28vw, 340px)" }}>
-                        <h2
-                            className="text-balance font-bold text-white"
-                            style={{ fontSize: "clamp(1.5rem, 3vw, 2.25rem)", lineHeight: 1.25 }}
-                        >
-                            Still have questions?
-                        </h2>
-                        <p
-                            className="mt-2 text-white/80"
-                            style={{ fontSize: "clamp(0.8rem, 1.2vw, 0.9375rem)" }}
-                        >
-                            Questions about lenses or ordering or even about us?
-                        </p>
-                    </div>
-                </div>
-
-                {/* ── Part 2: Two-column CTA row ── */}
-                <div className="grid w-full grid-cols-1 sm:grid-cols-2  bg-white">
-                    {/* Contact us */}
-                    <div
-                        className="flex flex-col justify-between px-6 py-10 sm:px-10 md:px-16 lg:px-20 xl:px-24"
-                        style={{ borderRight: "1px solid #e5e7eb" }}
-                    >
-                        <div>
-                            <h3
-                                className="font-bold text-black"
-                                style={{ fontSize: "clamp(1.125rem, 1.8vw, 1.5rem)" }}
-                            >
-                                Contact us
-                            </h3>
-                            <p
-                                className="mt-3 leading-relaxed text-gray-500 max-w-md"
-                                style={{ fontSize: "clamp(0.8rem, 1.1vw, 0.9rem)" }}
-                            >
-                                Reach out straight to our mail and our teams will reach back right away
-                            </p>
-                        </div>
-
-                        <button
-                            className="mt-8 inline-flex w-fit items-center gap-3 bg-black px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-gray-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2"
-                            style={{ minWidth: "160px" }}
-                        >
-                            Contact us
-                            <ArrowRight className="h-4 w-4 flex-shrink-0" />
-                        </button>
-                    </div>
-
-                    {/* Enquiry form */}
-                    <div className="flex flex-col justify-between px-6 py-10 sm:px-10 md:px-16 lg:px-20 xl:px-24">
-                        <div>
-                            <h3
-                                className="font-bold text-black"
-                                style={{ fontSize: "clamp(1.125rem, 1.8vw, 1.5rem)" }}
-                            >
-                                Enquiry from
-                            </h3>
-                            <p
-                                className="mt-3 leading-relaxed text-gray-500"
-                                style={{ fontSize: "clamp(0.8rem, 1.1vw, 0.9rem)" }}
-                            >
-                                Fill out our enquiry and select from our pre defined categories and specify your requirements, so we deliver faster, more precise response to your Enquiry.
-                            </p>
-                        </div>
-
-                        <button
-                            className="mt-8 inline-flex w-fit items-center gap-3 bg-black px-6 py-3 text-sm font-medium text-white transition-colors hover:bg-gray-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2"
-                            style={{ minWidth: "160px" }}
-                        >
-                            Fill Form
-                            <ArrowRight className="h-4 w-4 flex-shrink-0" />
-                        </button>
-                    </div>
-                </div>
-            </section>
-
+            <ContactSection />
             {/* ═══════════════════════════════════════════════════════════════════════════
           SECTION 9: CONTACT US / ENQUIRY FORM
       ═══════════════════════════════════════════════════════════════════════════ */}

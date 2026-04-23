@@ -3,9 +3,9 @@ import { ArrowRight } from "lucide-react"
 
 export function ContactSection() {
     return (
-        <section className="flex w-full h-[70vh] bg-white flex-col relative">
+        <section className="flex w-full min-h-[70vh] bg-white flex-col relative">
             {/* ── Part 1: Banner with dark overlay ── */}
-            <div className="relative w-full h-full mb-5 overflow-hidden" style={{ minHeight: "clamp(180px, 28vw, 340px)" }}>
+            <div className="relative w-full flex-1 mb-5 overflow-hidden" style={{ minHeight: "clamp(180px, 28vw, 340px)" }}>
                 {/* Background photo */}
                 <Image
                     src="/contact.jpg"
@@ -94,5 +94,6 @@ export function ContactSection() {
                 </div>
             </div>
         </section>
+
     )
 }
