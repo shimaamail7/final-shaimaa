@@ -3,51 +3,41 @@
 export function CraftSection() {
   return (
     <section
-      className="relative w-full h-[150vh]"
+      className="reel-stage w-full min-h-[150dvh]"
       style={{ backgroundColor: "transparent" }}
     >
-      {/* Background color and gradient are handled globally in page.tsx */}
-      {/* Sticky container that locks the text on the screen while the user scrolls through the 50vh 'resting' zone */}
-      <div className="sticky top-0 flex h-screen w-full flex-col items-center justify-center p-6">
-        {/* Center text content */}
-        <div className="relative z-20 flex w-full flex-col items-center justify-center text-center">
-
-          <div className="mb-5">
+      <div className="sticky top-0 flex min-h-dvh w-full flex-col items-center justify-center px-[var(--reel-gutter-x)]">
+        <div className="reel-stage-copy reel-stage-copy--center relative z-20 w-full max-w-2xl">
+          <div className="mb-[var(--space-5)]">
             <span
-              className="gs-scene-2-title gs-dynamic-text-light font-sans uppercase tracking-[0.3em]"
-              style={{ fontWeight: 500, fontSize: "clamp(0.65rem, 1.2vw, 0.85rem)", color: "#1a1a2e" }}
+              className="gs-scene-2-title gs-dynamic-text-light mb-8 font-playfair text-[20px] font-medium uppercase leading-[1.36] tracking-[0.11em]"
+              style={{
+                color: "#1a1a2e",
+              }}
             >
-              CRAFT
+              Our Philosophy
             </span>
           </div>
           <h2
-            className="gs-scene-2-title gs-dynamic-text mb-6 font-sans text-4xl font-black uppercase tracking-tight md:text-5xl lg:text-6xl"
+            className="gs-scene-2-title gs-dynamic-text mb-8 font-inter text-[64px] font-bold uppercase leading-[0.98] tracking-[-0.04em]"
             style={{
-              fontWeight: 900,
-              letterSpacing: "-0.01em",
-              lineHeight: 1.1,
+              maxWidth: "20ch",
               color: "#1a1a2e",
             }}
           >
-            Precision Crafted
+            performance-first engineering
           </h2>
-
-          {/* Description */}
           <p
-            className="gs-scene-2-p gs-dynamic-text-light max-w-lg font-sans text-sm leading-relaxed md:text-base"
-            style={{
-              lineHeight: 1.8,
-              color: "#666666",
-            }}
+            className="gs-scene-2-p gs-dynamic-text-light mb-16 max-w-lg font-inter text-[20px] font-medium leading-[1.5] tracking-[0.02em]"
+            style={{ color: "#1a1a2e" }}
           >
-            Every curve is meticulously sculpted to fit the natural contours of your face.
+            We are committed to industry best practices to deliver lenses that
+            suit the sophisticated taste of users
           </p>
         </div>
-
-        {/* SCROLL NEXT indicator — bottom center */}
-        <div className="absolute bottom-5 left-1/2 left-translate-x-1/2">
+        <div className="reel-stage-scroll-hint">
           <span
-            className="gs-scene-2-scroll gs-dynamic-text-light font-sans text-[10px] uppercase tracking-[0.25em]"
+            className="gs-scene-2-scroll gs-dynamic-text-light font-inter text-[10px] uppercase tracking-[0.25em]"
             style={{ color: "#1a1a2e" }}
           >
             SCROLL NEXT

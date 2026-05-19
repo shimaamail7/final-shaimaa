@@ -3,15 +3,14 @@ import Image from "next/image"
 
 export function PartnersSection() {
   return (
-    <section className="w-full">
+    <section className="w-full ">
       <div className="grid h-screen grid-cols-1 grid-rows-2 lg:grid-cols-2 lg:grid-rows-1">
         {/* Left Side - Content */}
-        <div className="flex items-center justify-center bg-black px-6 py-16 sm:px-8 sm:py-20 md:px-12 md:py-24 lg:px-16 lg:py-0 xl:px-20 2xl:px-28">
-          <div className="w-full max-w-md lg:max-w-lg xl:max-w-xl 2xl:max-w-2xl">
+        <div className="flex items-center  h-screen bg-black content-center-safe justify-center px-6 py-16 sm:px-8 sm:py-20 md:px-12 md:py-24 lg:px-16 lg:py-0 xl:px-20 2xl:px-28">
+          <div className="w-full max-w-md  h-screen flex flex-col justify-center lg:ml-10  self-center  lg:max-w-lg xl:max-w-xl 2xl:max-w-2xl">
             {/* Tagline */}
             <p
-              className="mb-6 sm:mb-6 lg:mb-10 text-white/70 text-[9px] sm:text-[10px] lg:text-xs tracking-[0.11em] leading-[135%] font-playfair font-normal"
-              style={{ fontFamily: "var(--font-playfair)", fontWeight: 400 }}
+              className="mb-8 font-playfair 2xl:text-[20px] lg:text-[16px] font-medium uppercase leading-[1.36] tracking-[0.11em] text-white/70"
             >
               Hello Head
               <br />
@@ -22,8 +21,7 @@ export function PartnersSection() {
 
             {/* Main Heading */}
             <h2
-              className="mb-6 sm:mb-8 lg:mb-10 relative z-10 text-[32px] sm:text-[40px] md:text-[48px] lg:text-[52px] xl:text-[56px] font-bold leading-[98%] tracking-[-0.03em] text-white"
-              style={{ fontFamily: "var(--font-inter)" }}
+              className="relative z-10 mb-8 font-inter 2xl:text-[64px] text-[40px] lg:text-[48px] font-bold uppercase leading-[0.98] tracking-[-0.04em] text-white"
             >
               PARTNERS
               <br />
@@ -34,18 +32,16 @@ export function PartnersSection() {
 
             {/* Description */}
             <p
-              className="mb-8 max-w-sm sm:mb-10 md:max-w-md lg:mb-12 text-white/70 text-[13px] sm:text-sm lg:text-base leading-[150%] tracking-[0.02em]"
-              style={{ fontFamily: "var(--font-inter)", fontWeight: 400 }}
+              className="mb-16 max-w-[400px] font-inter text-[20px] lg:text-[16px] font-medium leading-[1.5] tracking-[0.02em] text-white/70"
             >
               Optika supports hundreds and here holds units, ophthalmologists, low vision and vision and integrated specialists. Let Optika be your partner for distribution, marketing, and clinical support, opening new pathways from head safe until your patients live life better.
             </p>
 
             {/* CTA Button */}
             <button
-              className="group inline-flex w-fit items-center gap-3 text-sm font-medium text-white transition-colors hover:text-white/80 sm:text-base lg:text-[16px]"
-              style={{ fontFamily: "var(--font-inter)" }}
+              className="group cursor-pointer inline-flex w-fit items-center gap-3 font-inter text-[20px] font-normal leading-none tracking-normal text-white transition-colors hover:text-white/80"
             >
-              <span className="flex h-5 w-5 sm:h-6 sm:w-6 items-center justify-center rounded border border-white/30 transition-all group-hover:border-white group-hover:bg-white group-hover:text-black">
+              <span className="flex h-5 w-5 sm:h-8 sm:w-8 items-center justify-center  border border-white/30 transition-all group-hover:border-white group-hover:bg-white group-hover:text-black">
                 <ArrowRight className="h-3 w-3 sm:h-4 sm:w-4" />
               </span>
               <span>Discover Our Programs</span>

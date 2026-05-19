@@ -29,6 +29,16 @@ const nextConfig = {
   compress: true, 
   allowedDevOrigins: [ '192.168.0.170' ],
 
+  async redirects() {
+    return [
+      {
+        source: "/products/actus-due-plus",
+        destination: "/products/acutus/actus-due-plus",
+        permanent: true,
+      },
+    ]
+  },
+
 }
 
 export default nextConfig

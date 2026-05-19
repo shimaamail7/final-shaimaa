@@ -16,7 +16,7 @@ export interface HeroSectionProps {
 export function HeroSection({
   imageSrc = "/hero.jpg",
   imageAlt = "Premium optical lenses showcasing modern eyecare technology",
-  imagePosition = "top",
+  imagePosition = "50% 20%",
   eyebrowText = "Exceptional Optical Solutions",
   title = (
     <>
@@ -34,10 +34,10 @@ export function HeroSection({
   ctaHref = "#about"
 }: HeroSectionProps) {
   return (
-    <section className=" relative min-h-screen w-full ">
+    <section className=" relative min-h-screen 2xl:min-h-[70vh] 2xl:h-[70vh] w-full  ">
 
       {/* Hero Image - Positioned absolutely to start under the 64px top navigation */}
-      <div className="absolute top-0 min-h-screen inset-x-0 bottom-0">
+      <div className="absolute top-0 min-h-screen inset-x-0 bottom-0 min-h-[70vh] 2xl:h-[70vh] 2xl:min-h-[70vh]">
         <Image
           src={imageSrc}
           alt={imageAlt}
@@ -49,7 +49,7 @@ export function HeroSection({
       </div>
 
       {/* Content Container */}
-      <div className="relative mx-auto flex min-h-screen max-w-[2560px] items-end ml-4   px-4   sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-20" style={{ bottom: '15vh' }}>
+      <div className="relative mx-auto flex min-h-screen  items-end 2xl:items-center 2xl:pt-40 ml-4   px-4   sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-20" style={{ bottom: '15vh' }}>
         <div className="grid w-full grid-cols-1 gap-8 lg:grid-cols-2">
           {/* Spacer for image on large screens */}
           <div className="hidden lg:block" />

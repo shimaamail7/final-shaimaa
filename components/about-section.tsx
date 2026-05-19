@@ -17,13 +17,12 @@ export function AboutSection() {
         </div>
 
         {/* Right Side - Content */}
-        <div className="flex items-center justify-center bg-black px-6 py-16 sm:px-8 sm:py-20 md:px-12 md:py-24 lg:px-16 lg:py-0 xl:px-20 2xl:px-28">
+        <div className="flex lg:ml-[58px] items-center justify-center bg-black px-6 py-16 sm:px-8 sm:py-20 md:px-12 md:py-24 lg:px-16 lg:py-0 xl:px-20 2xl:px-28">
           <div className="w-full max-w-md lg:max-w-lg xl:max-w-xl 2xl:max-w-2xl font-playfair" >
             {/* Tagline */}
-            <p style={{
-              fontFamily: "var(--font-playfair)",
-              fontWeight: 400,
-            }} className="mb-6 text-white/70 sm:mb-6 text-[9px] sm:text-[10px] lg:text-xs tracking-[0.11em] leading-[135%] font-playfair font-normal">
+            <p
+              className="mb-8 2xl:text-[20px] text-[16px] font-medium leading-[1.36] tracking-[0.11em] text-white/70 font-playfair uppercase"
+            >
               We
               <br />
               Help See
@@ -32,9 +31,9 @@ export function AboutSection() {
             </p>
 
             {/* Main Heading */}
-            <h2 style={{
-              fontFamily: "var(--font-inter)",
-            }} className="mb-6 relative z-10 text-[32px] sm:text-[40px] md:text-[48px] lg:text-[52px] xl:text-[56px] font-bold leading-[98%] tracking-[-0.03em] text-white sm:mb-8 md:mb-10">
+            <h2
+              className="relative z-10 mb-8 font-inter 2xl:text-[64px] text-[40px] font-bold leading-[0.98] tracking-[-0.04em] text-white uppercase"
+            >
               EYEWEAR
               <br />
               PRODUCTS AND
@@ -48,21 +47,16 @@ export function AboutSection() {
 
             {/* Description */}
             <p
-              className="mb-8 max-w-[400px] text-white/70 sm:mb-10 lg:mb-12 text-[13px] sm:text-sm lg:text-base leading-[150%] tracking-[0.02em]"
-              style={{
-                fontFamily: "var(--font-inter)",
-                fontWeight: 400,
-              }}
+              className="mb-16 max-w-[400px] font-inter 2xl:text-[20px] text-[16px] font-medium leading-[1.5] tracking-[0.02em] text-white/70"
             >
               Optika is a Provider and Distributor of Exclusive and advanced Digital Lenses, Ophthalmic care products, and Premium Eyewear Solutions.
             </p>
 
             {/* CTA Button */}
             <button
-              className="group inline-flex w-fit items-center gap-3 text-sm font-medium text-white transition-colors hover:text-white/80 sm:text-base lg:text-[16px]"
-              style={{ fontFamily: "var(--font-inter)" }}
+              className="group cursor-pointer inline-flex w-fit items-center gap-3 font-inter text-[20px] font-normal leading-none tracking-normal text-white transition-colors hover:text-white/80 hover:bg-black"
             >
-              <span className="flex h-5 w-5 sm:h-6 sm:w-6 items-center justify-center bg-white text-black transition-transform group-hover:scale-105">
+              <span className="flex h-5 w-5 sm:h-8 sm:w-8 items-center justify-center bg-white text-black group-hover:border group-hover:text-white group-hover:bg-black/10  grtransition-transform group-hover:scale-105">
                 <ArrowRight className="h-3 w-3 sm:h-4 sm:w-4" />
               </span>
               <span>Discover Optika</span>

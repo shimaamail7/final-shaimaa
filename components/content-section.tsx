@@ -93,14 +93,14 @@ export function ContentSection({ title, description, index }: ContentSectionProp
 
         <h2
           ref={titleRef}
-          className="mb-6 font-sans text-2xl font-light tracking-tight text-white md:text-3xl lg:text-4xl"
+          className="mb-6 font-inter text-2xl font-light tracking-tight text-white md:text-3xl lg:text-4xl"
         >
           {title}
         </h2>
 
         <p
           ref={descriptionRef}
-          className="font-sans text-sm leading-relaxed text-white/60 md:text-base lg:text-lg"
+          className="font-inter text-sm leading-relaxed text-white/60 md:text-base lg:text-lg"
         >
           {description}
         </p>

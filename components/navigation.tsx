@@ -8,8 +8,8 @@ const navLinks = [
   { href: "/showreel", label: "ShowReel" },
   { href: "/products", label: "Products" },
   { href: "/about", label: "About" },
-  { href: "/solutions", label: "Solutions" },
-  { href: "/try", label: "Try" },
+  { href: "/contact", label: "Contact" },
+  { href: "/try-on", label: "Try-On" },
 ]
 
 export function Navigation() {
@@ -37,7 +37,7 @@ export function Navigation() {
 
   return (
     <header className={`sticky top-0 left-0 right-0 z-50 transition-colors duration-500 ${bgColorClass} `}>
-      <nav className={`mx-auto flex h-16 max-w-[2560px] items-center justify-between px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-20 ${textColorClass}`}>
+      <nav className={`mx-auto flex h-[80px] 2xl:h-[128px] max-w-[2560px] items-center justify-between px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-20 ${textColorClass}`}>
         {/* Logo */}
         <Link
           href="/"
@@ -118,7 +118,7 @@ export function Navigation() {
                 href="/partners"
                 className="block text-black transition-colors hover:text-gray-600"
                 style={{
-                  fontFamily: "'Inter', sans-serif",
+                  fontFamily: "'Inter', inter-serif",
                   fontWeight: 400,
                   fontSize: "20px",
                   lineHeight: "150%",

@@ -1,73 +1,49 @@
 "use client"
 
-import Image from "next/image"
-
-
 export function PhilosophySection() {
   return (
-    <section className="relative flex min-h-screen items-start md:items-center bg-transparent">
-      {/* 
-        The background gradient is now gracefully handled globally in page.tsx 
-        to allow seamless crossfading between sections via GSAP.
-      */}
+    <section className="reel-stage bg-transparent">
+      <div className="reel-stage-inner reel-stage-inner--split">
+        <div aria-hidden className="min-h-0 md:min-h-dvh" />
 
-      {/*
-        Content panel — right half, z-20 so the 3D canvas (z-30) overlaps.
-        Model occupies the left ~55% via 3D positioning.
-      */}
-      <div className="relative z-20 ml-auto flex w-full max-w-sm flex-col items-center justify-start pt-[25vh] px-8 pb-10 mr-10
-      md:max-w-xl md:justify-center md:py-20 md:pt-20 md:px-12 lg:px-5">
+        <div className="reel-stage-copy-intro reel-stage-copy-start max-w-lg">
+          <p
+            className="gs-scene-1-title text-gray-300 gs-dynamic-text mb-8 w-full font-playfair text-[20px] font-medium leading-[1.36] tracking-[0.11em]"
+            style={{
 
-        <p
-          className="gs-scene-1-title gs-dynamic-text w-full font-sans text-xs font-medium uppercase tracking-widest mb-2 md:text-sm"
-          style={{
-            color: "#e5e7eb",
-            letterSpacing: "0.25em",
-            textAlign: "left",
-            opacity: 0,
-          }}
-        >
-          Philosophy
-        </p>
-        <h2
-          className="gs-scene-1-title gs-dynamic-text mb-4 w-full font-sans text-6xl font-black uppercase tracking-tighter md:text-7xl lg:text-8xl"
-          style={{
-            fontWeight: 900,
-            color: "#ffffff",
-            letterSpacing: "-0.03em",
-            lineHeight: 0.92,
-            textAlign: "left",
-            opacity: 0,
-          }}
-        >
-          VISIONARY
-        </h2>
+              opacity: 0,
+            }}
+          >
+            Welcome and
+          </p>
+          <h2
+            className="gs-scene-1-title gs-dynamic-text mb-8 w-full font-inter text-[64px] font-bold uppercase leading-[0.98] tracking-[-0.04em] "
+            style={{
+              color: "#ffffff",
+              opacity: 0,
+            }}
+          >
+            We are optika
+          </h2>
 
-        {/* Subtitle — below VISIONARY */}
+          <p
+            className="gs-scene-1-p text-gray-300 gs-dynamic-text-light mb-16 max-w-[50ch] font-inter text-[20px] font-medium leading-[1.5] tracking-[0.02em] lg:pr-[84px]"
+            style={{
 
-
-        {/* Description */}
-        <p
-          className="gs-scene-1-p gs-dynamic-text-light mb-10 font-sans text-sm leading-relaxed"
-          style={{
-            maxWidth: "40ch",
-            color: "#9ca3af",
-            lineHeight: 1.75,
-            textAlign: "center",
-            opacity: 0,
-          }}
-        >
-          Experience the pinnacle of optical engineering. Designed to
-          provide unmatched clarity while making a bold statement.
-        </p>
+              opacity: 0,
+            }}
+          >
+            We delivers to you Premium Digital Lenses and Solutions manufactured
+            to the highest standards.
+          </p>
+        </div>
       </div>
 
-      {/* SCROLL indicator — bottom center, just the word */}
-      <div className="gs-scene-1-scroll absolute bottom-10 left-1/2 z-20 -translate-x-1/2" style={{ opacity: 0 }}>
-        <span className="gs-dynamic-text-light font-sans text-[10px] uppercase tracking-[0.25em] text-white">
+      <div className="reel-stage-scroll-hint gs-scene-1-scroll" style={{ opacity: 0 }}>
+        <span className="gs-dynamic-text-light font-inter text-[10px] uppercase tracking-[0.25em] text-white">
           SCROLL NEXT
         </span>
       </div>
-    </section >
+    </section>
   )
 }

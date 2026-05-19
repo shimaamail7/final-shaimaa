@@ -214,28 +214,7 @@ export default function AboutPage() {
                 {/* Dark Overlay - strictly bg-black/60 as per design system requirements */}
                 <div className="absolute inset-0 bg-black/60" />
 
-                {/* Top Navigation (Header) */}
-                <header className="absolute top-0 left-0 right-0 z-20 w-full px-6 py-8 sm:px-10 md:px-16 lg:px-[120px]">
-                    <div className="flex items-center justify-between">
-                        {/* Logo / Brand Name */}
-                        <Link href="/" className="text-[18px] font-semibold text-white transition-opacity hover:opacity-80">
-                            Optika
-                        </Link>
 
-                        {/* Nav Links */}
-                        <nav className="hidden items-center gap-8 md:flex lg:gap-12">
-                            <Link href="/" className="text-[14px] font-normal text-white transition-opacity hover:opacity-80">Home</Link>
-                            <Link href="/products" className="text-[14px] font-normal text-white transition-opacity hover:opacity-80">Products</Link>
-                            <Link href="/terms" className="text-[14px] font-normal text-white transition-opacity hover:opacity-80">Terms</Link>
-                            <Link href="/partners" className="text-[14px] font-normal text-white transition-opacity hover:opacity-80">/ For Partners</Link>
-                        </nav>
-
-                        {/* Mobile Menu Icon (Visible only on small screens) */}
-                        <button className="text-white md:hidden" aria-label="Menu">
-                            <Menu className="h-6 w-6" />
-                        </button>
-                    </div>
-                </header>
 
                 {/* Hero Content */}
                 <div className="relative z-10 flex h-full w-full  px-6 sm:px-10 md:px-16 lg:px-[120px] items-end pb-16">
@@ -246,7 +225,7 @@ export default function AboutPage() {
                         </p>
 
                         {/* Main Heading - Extra bold, all caps, tight line height */}
-                        <h1 className="mb-6 font-sans text-[44px] font-extrabold uppercase leading-[98%] tracking-tight text-white  lg:text-[56px] 2xl:text-[64px]">
+                        <h1 className="mb-6 font-inter text-[44px] font-extrabold uppercase leading-[98%] tracking-tight text-white  lg:text-[56px] 2xl:text-[64px]">
                             EXCEPTIONAL<br />
                             OPTICAL<br />
                             SOLUTIONS
@@ -619,7 +598,7 @@ export default function AboutPage() {
                         {/* Center Video Section */}
                         <div className="order-first lg:order-none flex-1 min-h-[300px] aspect-video  w-full lg:w-[50%] bg-black">
                             <video
-                                src="/transtion.mp4"
+                                src="/acutus.mp4"
                                 autoPlay
                                 loop
                                 muted

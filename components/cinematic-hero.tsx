@@ -3,6 +3,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import { Playfair_Display } from "next/font/google";
+import { preload } from "react-dom";
 
 const playfair = Playfair_Display({ subsets: ["latin"], weight: ["400", "500", "600"] });
 
@@ -10,6 +11,7 @@ const playfair = Playfair_Display({ subsets: ["latin"], weight: ["400", "500", "
 const FRAME_COUNT = 121;
 
 export default function CinematicHero() {
+
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const textRef = useRef<HTMLHeadingElement>(null);
@@ -182,11 +184,11 @@ export default function CinematicHero() {
           We do our best
         </p>
 
-        <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white max-w-2xl uppercase tracking-tight leading-[1.1] mb-5 font-sans">
+        <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white max-w-2xl uppercase tracking-tight leading-[1.1] mb-5 font-inter">
           So you never<br />miss a moment
         </h1>
 
-        <p className="text-[#E6E6E6] max-w-[280px] md:max-w-sm text-xs md:text-sm font-light mb-6 leading-[1.6] font-sans">
+        <p className="text-[#E6E6E6] max-w-[280px] md:max-w-sm text-xs md:text-sm font-light mb-6 leading-[1.6] font-inter">
           Optika delivers to you Premium Digital<br />
           Lenses and Solutions manufactured to the<br />
           highest standards.
@@ -196,19 +198,10 @@ export default function CinematicHero() {
           <span className="flex items-center justify-center w-7 h-7 border border-white/30 group-hover:border-white transition-colors text-[10px]">
             &#8595;
           </span>
-          <span className="text-xs tracking-wide font-sans font-light">Learn More</span>
+          <span className="text-xs tracking-wide font-inter font-light">Learn More</span>
         </button>
       </div>
 
-      {/* Loading Overlay */}
-      <div
-        className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-[#D9C5B2] transition-opacity duration-1000 pointer-events-none"
-        style={{ opacity: imagesLoaded === FRAME_COUNT ? 0 : 1 }}
-      >
-        <div className={`text-sm tracking-widest uppercase text-[#4A3B32]/60 animate-pulse ${playfair.className}`}>
-          Immersing... {Math.round((imagesLoaded / FRAME_COUNT) * 100)}%
-        </div>
-      </div>
     </div>
   );
 }
