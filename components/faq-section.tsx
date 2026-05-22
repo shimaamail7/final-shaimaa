@@ -43,8 +43,8 @@ const faqs = [
 
 export function FaqSection() {
     return (
-        <section className="w-full min-h-screen  bg-white ">
-            <div className="mx-auto max-w-7xl px-6 py-16 sm:px-8 sm:py-20 lg:px-12 lg:py-24 xl:px-16">
+        <section className="w-full min-h-screen lg:px-26 2xl:px-50  bg-white ">
+            <div className="w-full py-16 sm:py-20 lg:py-24">
                 {/* Header */}
                 <div className="mb-10 sm:mb-12 lg:mb-14">
                     <h2 className="mb-2 text-3xl font-bold tracking-tight text-black sm:text-4xl lg:text-5xl">
@@ -62,7 +62,7 @@ export function FaqSection() {
                             <h3 className="mb-2 text-sm font-semibold text-black sm:text-base">
                                 {faq.question}
                             </h3>
-                            <p className="text-xs leading-relaxed text-gray-600 sm:text-sm">
+                            <p className="text-xs leading-relaxed text-gray-600 sm:text-sm text-justify">
                                 {faq.answer}
                             </p>
                         </div>

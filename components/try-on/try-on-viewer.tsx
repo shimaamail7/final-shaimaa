@@ -6,6 +6,7 @@ import { Center, ContactShadows, Environment, useGLTF } from "@react-three/drei"
 import * as THREE from "three"
 import type { TryOnSwatch } from "@/lib/try-on/swatches"
 import { WebGLErrorBoundary } from "@/components/webgl-error-boundary"
+import { isMobileGPU } from "@/lib/webgl-utils"
 
 const MODEL_URL = "/AkshtaS%20spetcs2.glb"
 
@@ -65,9 +66,16 @@ function ViewerScene({ swatch }: { swatch: TryOnSwatch }) {
       <ambientLight intensity={1.15} />
       <directionalLight position={[8, 10, 6]} intensity={1.1} />
       <directionalLight position={[-6, 4, -4]} intensity={0.55} />
-      <Environment preset="studio" />
+      {!isMobileGPU() && <Environment preset="studio" />}
       <GlassesModel swatch={swatch} />
-      <ContactShadows resolution={512} scale={12} blur={2} opacity={0.35} far={8} color="#000000" />
+      <ContactShadows
+        resolution={isMobileGPU() ? 256 : 512}
+        scale={12}
+        blur={2}
+        opacity={0.35}
+        far={8}
+        color="#000000"
+      />
     </>
   )
 }
@@ -76,7 +84,17 @@ export function TryOnViewer({ swatch, className }: { swatch: TryOnSwatch; classN
   return (
     <WebGLErrorBoundary>
       <div className={className}>
-        <Canvas camera={{ position: [0, 0.15, 4.2], fov: 42 }} className="h-full w-full" dpr={[1, 2]}>
+        <Canvas
+          camera={{ position: [0, 0.15, 4.2], fov: 42 }}
+          className="h-full w-full touch-none"
+          dpr={[1, 1.5]}
+          gl={{
+            alpha: true,
+            antialias: false,
+            powerPreference: "default",
+            failIfMajorPerformanceCaveat: false,
+          }}
+        >
           <Suspense fallback={null}>
             <ViewerScene swatch={swatch} />
           </Suspense>

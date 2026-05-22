@@ -8,8 +8,10 @@ import { Loader } from "@/components/loader"
 import { PhilosophySection } from "@/components/philosophy-section"
 import { CraftSection } from "@/components/craft-section"
 import { InnovationSection } from "@/components/innovation-section"
+import { REEL_CRAFT_BEIGE } from "@/lib/reel-gradient-themes"
 import { BackgroundGradientAnimation } from "@/components/ui/background-gradient-animation"
 import { Logo } from "@/components/logo"
+import { WebGLErrorBoundary } from "@/components/webgl-error-boundary"
 
 const GlassesCanvas = dynamic(
   () => import("@/components/glasses-model").then((mod) => mod.GlassesCanvas),
@@ -39,8 +41,8 @@ function MainContent({ isReady, onComplete }: { isReady: boolean; onComplete: ()
       {/* Global beige gradient for Craft */}
       <div id="global-gradient-bg-light" className="pointer-events-none fixed inset-0 z-0 overflow-hidden" style={{ width: '100%', height: '100vh', transition: 'opacity 1s ease-in-out', opacity: currentStage === 1 ? 1 : 0 }}>
         <BackgroundGradientAnimation
-          gradientBackgroundStart="rgb(252, 245, 226)"
-          gradientBackgroundEnd="rgb(252, 245, 226)"
+          gradientBackgroundStart={REEL_CRAFT_BEIGE}
+          gradientBackgroundEnd={REEL_CRAFT_BEIGE}
           firstColor="180, 100, 255"
           secondColor="255, 120, 80"
           thirdColor="180, 100, 255"
@@ -81,11 +83,13 @@ function MainContent({ isReady, onComplete }: { isReady: boolean; onComplete: ()
       </div>
 
       <div className="relative" id="philosophy">
-        <div className="pointer-events-none fixed left-0 top-0 z-30 h-screen w-full">
-          <GlassesCanvas
-            isVisible={isReady}
-            className="h-full w-full"
-          />
+        <div className="pointer-events-none fixed inset-0 z-30 h-dvh w-full">
+          <WebGLErrorBoundary onError={onComplete}>
+            <GlassesCanvas
+              isVisible={isReady}
+              className="h-full w-full"
+            />
+          </WebGLErrorBoundary>
         </div>
 
         <PhilosophySection />
@@ -135,9 +139,9 @@ export function ReelIntro({ onComplete }: { onComplete: () => void }) {
       {isLoading && <Loader onComplete={handleLoadingComplete} onReady={handleReady} />}
 
       <SnapScrollProvider stageCount={3} locked={isScrollLocked}>
-        <div className={`transition-opacity duration-500 ${showContent ? "opacity-100" : "opacity-0"}`}>
+        {showContent ? (
           <MainContent isReady={showContent} onComplete={onComplete} />
-        </div>
+        ) : null}
       </SnapScrollProvider>
     </>
   )

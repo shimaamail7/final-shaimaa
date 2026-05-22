@@ -11,43 +11,82 @@ import { AboutSection } from "@/components/about-section";
 import { DifferenceSection } from "@/components/difference-section";
 import { PartnersSection } from "@/components/partners-section";
 import { DifferencePartnerWrapper } from "@/components/difference-partner-wrapper";
+import { useStickySections } from "@/hooks/use-sticky-sections";
+
+import { Skeleton } from "@/components/ui/skeleton";
+
+const SectionSkeleton = () => <Skeleton className="w-full h-[50vh] rounded-none bg-zinc-900/50" />;
+
+const heroSectionConfig = {
+  imageSrc: "/hero.jpg",
+  imageAlt: "Premium optical lenses showcasing modern eyecare technology",
+  imagePosition: "50% 20%",
+  eyebrowText: "Exceptional Optical Solutions",
+  title: (
+    <>
+      HIGH-END
+      <br />
+      LENSES
+      <br />
+      FOR MODERN
+      <br />
+      EYECARE
+    </>
+  ),
+  description: "Optika delivers to you Premium Digital Lenses and Solutions manufactured to the highest standards.",
+  ctaText: "Learn More",
+  ctaHref: "#about", heroSpacer: true, 
+};
+
+
 
 const LensCategoriesSection = dynamic(() =>
   import("@/components/lens-categories-section").then(
     (mod) => mod.LensCategoriesSection,
   ),
+  { loading: SectionSkeleton }
 );
-const SolutionsSection = dynamic(() =>
-  import("@/components/solutions-section").then((mod) => mod.SolutionsSection),
+const Solutions = dynamic(() =>
+  import("@/components/Solutions").then((mod) => mod.default || mod),
+  { loading: SectionSkeleton }
 );
 const ProductsTabsSection = dynamic(() =>
   import("@/components/products-tabs-section").then(
     (mod) => mod.ProductsTabsSection,
   ),
+  { loading: SectionSkeleton }
 );
 const WorkflowSection = dynamic(() =>
   import("@/components/workflow").then((mod) => mod.WorkflowSection),
+  { loading: SectionSkeleton }
 );
 const PerformanceSection = dynamic(() =>
   import("@/components/performance-section").then(
     (mod) => mod.PerformanceSection,
   ),
+  { loading: SectionSkeleton }
 );
 const CommitmentSection = dynamic(() =>
   import("@/components/commitment-section").then(
     (mod) => mod.CommitmentSection,
   ),
+  { loading: SectionSkeleton }
 );
 const FaqSection = dynamic(() =>
   import("@/components/faq-section").then((mod) => mod.FaqSection),
+  { loading: SectionSkeleton }
 );
 const ContactSection = dynamic(() =>
   import("@/components/contact-section").then((mod) => mod.ContactSection),
+  { loading: SectionSkeleton }
 );
 export default function Home() {
   const [step, setStep] = useState<
     "checking" | "loader-only" | "reel" | "fading-out" | "fading-in" | "hero"
   >("checking");
+
+  // Apply the premium GSAP ScrollTrigger sticky stacking animation
+  useStickySections(step === "hero");
 
   useEffect(() => {
     if (step === "loader-only" || step === "checking") {
@@ -63,7 +102,7 @@ export default function Home() {
   useEffect(() => {
     let isMounted = true;
     const ok = probeWebGL();
-    if (isMounted) setStep(ok ? "reel" : "loader-only");
+    if (isMounted) setStep(ok ? "hero" : "loader-only");
     return () => {
       isMounted = false;
     };
@@ -97,7 +136,6 @@ export default function Home() {
           ${step === "fading-out" ? "duration-500 ease-in" : "duration-700 ease-out"}
         `}
       />
-
       {(step === "reel" || step === "fading-out") && (
         <ReelIntro onComplete={handleComplete} />
       )}
@@ -106,18 +144,16 @@ export default function Home() {
 
       {(step === "loader-only" || step === "fading-in" || step === "hero") && (
         <MainLayout>
-          <HeroSection />
+          <HeroSection config={heroSectionConfig}  />
           <AboutSection />
-          <DifferencePartnerWrapper
-            difference={<DifferenceSection />}
-            partner={<PartnersSection />}
-          />
+
+          <DifferenceSection />
+          <PartnersSection />
+
           <LensCategoriesSection />
-          <SolutionsSection />
-          <ProductsTabsSection />
-          <WorkflowSection />
+
+          <Solutions />
           <PerformanceSection />
-          <CommitmentSection />
           <FaqSection />
           <ContactSection />
         </MainLayout>

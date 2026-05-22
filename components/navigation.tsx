@@ -5,10 +5,10 @@ import Link from "next/link"
 import { Menu, X } from "lucide-react"
 
 const navLinks = [
-  { href: "/showreel", label: "ShowReel" },
+  { href: "/about", label: "About us" },
   { href: "/products", label: "Products" },
-  { href: "/about", label: "About" },
-  { href: "/contact", label: "Contact" },
+  { href: "/Solutions", label: "Solutions" },
+  { href: "/contact", label: "Contact us" },
   { href: "/try-on", label: "Try-On" },
 ]
 
@@ -36,16 +36,16 @@ export function Navigation() {
   const bgColorClass = "bg-white"
 
   return (
-    <header className={`sticky top-0 left-0 right-0 z-50 transition-colors duration-500 ${bgColorClass} `}>
-      <nav className={`mx-auto flex h-[80px] 2xl:h-[128px] max-w-[2560px] items-center justify-between px-4 sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-20 ${textColorClass}`}>
+    <header className={`sticky top-0 left-0 right-0 lg:px-26 2xl:px-50  z-50 transition-colors duration-500 ${bgColorClass} `}>
+      <nav className={` flex h-[80px] items-center justify-between  ${textColorClass}`}>
         {/* Logo */}
         <Link
           href="/"
           style={{
             fontFamily: "var(--font-inter)",
-            fontWeight: 400,
+            fontWeight: 700, fontOpticalSizing: "auto",
           }}
-          className={`text-lg font-normal tracking-tight sm:text-xl transition-opacity hover:opacity-70 ${textColorClass}`}
+          className={`text-lg font-bold tracking-tight  sm:text-xl transition-opacity hover:opacity-70 ${textColorClass}`}
         >
           Optika
         </Link>
@@ -69,7 +69,7 @@ export function Navigation() {
           href="/partners"
           className={`hidden transition-opacity hover:opacity-70 md:block font-inter font-normal tracking-[0.02em] ${textColorClass}`}
         >
-          /For Partners
+          / For Partners
         </Link>
 
         {/* Mobile Menu Button */}

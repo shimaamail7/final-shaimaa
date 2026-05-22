@@ -222,27 +222,6 @@
   }
 }
 
-/* Lenis Smooth Scrolling */
-html.lenis,
-html.lenis body {
-  height: auto;
-}
-
-.lenis.lenis-smooth {
-  scroll-behavior: auto !important;
-}
-
-.lenis.lenis-smooth [data-lenis-prevent] {
-  overscroll-behavior: contain;
-}
-
-.lenis.lenis-stopped {
-  overflow: hidden;
-}
-
-.lenis.lenis-smooth iframe {
-  pointer-events: none;
-}
 
 /* ——— Reel intro: centered 1728×1117 artboard ——— */
 @media (min-width: 768px) {
@@ -370,8 +349,14 @@ html.lenis body {
 .reel-stage-copy {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   padding-block: var(--space-8);
+}
+
+@media (min-width: 768px) {
+  .reel-stage-copy {
+    justify-content: center;
+  }
 }
 
 .reel-stage-copy-intro {

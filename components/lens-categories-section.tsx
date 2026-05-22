@@ -144,14 +144,14 @@ export function LensCategoriesSection() {
   };
 
   return (
-    <section ref={sectionRef} className="w-full min-h-screen ">
+    <section ref={sectionRef} className="w-full min-h-screen relative ">
       {/* ═══════════════════════════════════════════════════════════════
           DESKTOP: Full-screen height with scroll snap (hidden on mobile/tablet)
       ═══════════════════════════════════════════════════════════════ */}
       <div className="hidden h-full lg:block">
         <div
           ref={desktopScrollRef}
-          className="h-screen snap-y snap-mandatory overflow-y-auto scroll-smooth"
+          className="h-screen   scroll-smooth"
         >
           <div className="flex h-screen snap-start items-stretch">
             {lensCategories.map((category, index) => (

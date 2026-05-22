@@ -3,11 +3,11 @@ import Image from "next/image"
 
 export function PartnersSection() {
   return (
-    <section className="w-full ">
-      <div className="grid h-screen grid-cols-1 grid-rows-2 lg:grid-cols-2 lg:grid-rows-1">
+    <section id="partners" className="relative z-30 w-full bg-black" style={{ willChange: "transform" }}>
+      <div className="grid h-screen grid-cols-1 grid-rows-2 lg:grid-cols-2  lg:grid-rows-1">
         {/* Left Side - Content */}
-        <div className="flex items-center  h-screen bg-black content-center-safe justify-center px-6 py-16 sm:px-8 sm:py-20 md:px-12 md:py-24 lg:px-16 lg:py-0 xl:px-20 2xl:px-28">
-          <div className="w-full max-w-md  h-screen flex flex-col justify-center lg:ml-10  self-center  lg:max-w-lg xl:max-w-xl 2xl:max-w-2xl">
+        <div className="flex items-center ml-26  h-screen  content-center-safe justify-center  py-16  sm:py-20 md:py-24  lg:py-0  2xl:ml-50">
+          <div className="w-full max-w-md  h-screen flex flex-col justify-center   self-center  lg:max-w-lg xl:max-w-xl 2xl:max-w-2xl">
             {/* Tagline */}
             <p
               className="mb-8 font-playfair 2xl:text-[20px] lg:text-[16px] font-medium uppercase leading-[1.36] tracking-[0.11em] text-white/70"
@@ -57,6 +57,7 @@ export function PartnersSection() {
             fill
             className="object-cover object-center"
             sizes="(max-width: 1024px) 100vw, 50vw"
+            priority
           />
         </div>
       </div>

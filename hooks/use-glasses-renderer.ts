@@ -10,7 +10,17 @@ export function useGlassesRenderer() {
   const [loadError, setLoadError] = useState<string | null>(null)
 
   useEffect(() => {
-    const renderer = new GlassesCanvasRenderer()
+    let renderer: GlassesCanvasRenderer
+    try {
+      renderer = new GlassesCanvasRenderer()
+    } catch (err) {
+      const message =
+        err instanceof Error ? err.message : "WebGL is not available on this device"
+      setLoadError(message)
+      setReady(false)
+      console.error("[try-on] WebGL renderer init failed:", err)
+      return
+    }
     rendererRef.current = renderer
     renderer
       .load()

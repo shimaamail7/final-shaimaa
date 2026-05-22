@@ -201,7 +201,7 @@ export default function AboutPage() {
             {/* ═══════════════════════════════════════════════════════════════════════════
           SECTION 1: HERO
       ═══════════════════════════════════════════════════════════════════════════ */}
-            <section className="relative h-screen w-full overflow-hidden">
+            <section className="relative h-screen w-full 2xl:h-[70vh] overflow-hidden">
                 {/* Background Image */}
                 <Image
                     src="/about-hero.jpg"

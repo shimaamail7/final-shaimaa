@@ -66,8 +66,8 @@ export default function RootLayout({
         />
       </head>
       {/* Apply the font variables to the body so they can be accessed anywhere */}
-      <body className={`${inter.className} ${geist.className}  ${playfair.variable} antialiased`} suppressHydrationWarning>
-        <Navigation />
+      <body className={`${inter.className}  ${playfair.variable} antialiased`} suppressHydrationWarning>
+        <Navigation /> 
         {children}
         <Analytics />
 

@@ -7,9 +7,15 @@ export function probeWebGL(): boolean {
 
   try {
     const canvas = document.createElement("canvas");
+    const attrs: WebGLContextAttributes = {
+      alpha: true,
+      antialias: true,
+      failIfMajorPerformanceCaveat: false,
+      powerPreference: "default",
+    };
     const gl =
-      canvas.getContext("webgl2", { alpha: true, antialias: true }) ??
-      canvas.getContext("webgl", { alpha: true, antialias: true });
+      canvas.getContext("webgl2", attrs) ??
+      canvas.getContext("webgl", attrs);
     if (!gl) {
       cached = false;
       return false;

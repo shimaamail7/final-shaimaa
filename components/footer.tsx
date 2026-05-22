@@ -45,20 +45,23 @@ const navLinksColumn2 = [
 export function Footer() {
     const logoRef = useRef<SVGSVGElement>(null)
     return (
-        < footer className="relative bg-black content-end-safe " >
+        <footer className="relative pt-5  px-4  md:pt-0 bg-black content-end-safe lg:px-25 2xl:px-48">
             {/* Main footer content */}
-            < div className="mx-auto max-w-7xl px-6 pb-10  sm:px-10 md:px-16 lg:px-[120px] lg:pb-12 lg:pt-20 content-end-safe " >
+            <div className="w-full pb-10 lg:pb-12 lg:pt-20  content-end-safe">
                 <div className="flex flex-col gap-12 lg:flex-row lg:justify-between lg:gap-20">
                     {/* Left Side - Logo, Address, Contact, Social */}
                     <div className="space-y-8">
                         {/* Logo */}
-                        <Link href="/" className="inline-block">
-                            <Logo
-                                ref={logoRef}
-                                className="relative z-10 w-16 max-w-[24vw] md:w-32 lg:w-40"
-                                fill="#ffffff"
-                            />
-                        </Link>
+                       <Link
+          href="/"
+          style={{
+            fontFamily: "var(--font-inter)",
+            fontWeight: 700, fontOpticalSizing: "auto",
+          }}
+          className={`text-lg font-bold tracking-tight mb-4  sm:text-xl transition-opacity hover:opacity-70 `}
+        >
+          Optika
+        </Link>
 
                         {/* Address */}
                         <div>
@@ -103,7 +106,7 @@ export function Footer() {
                     </div>
 
                     {/* Right Side - Navigation Columns */}
-                    <nav aria-label="Footer navigation" className="flex items-end gap-16 sm:gap-24 lg:gap-28">
+                    <nav aria-label="Footer navigation" className="flex items-end gap-16 sm:gap-24 2xl:mr-4 lg:gap-28">
                         {/* Column 1 */}
                         <ul className="space-y-4">
                             {navLinksColumn1.map((link) => (
@@ -136,15 +139,15 @@ export function Footer() {
             </div >
 
             {/* Divider */}
-            < div className="mx-auto max-w-7xl px-6 sm:px-10 md:px-16 lg:px-[120px] " >
+            <div className="w-full ">
                 <div className="border-t border-white/20" />
             </div >
 
             {/* Bottom bar */}
-            < div className="mx-auto max-w-7xl px-6 py-8 sm:px-10 md:px-16 lg:px-[120px]" >
+            <div className="w-full px-2 py-8">
                 <div className="flex flex-col items-start justify-between gap-4 sm:flex-row sm:items-center">
                     <p className="text-sm text-white">
-                        &copy; 2025 Optika. All rights reserved.
+                        &copy; {new Date().getFullYear()} Optika. All rights reserved.
                     </p>
                     <nav aria-label="Legal links" className="flex flex-wrap items-center gap-6">
                         <Link

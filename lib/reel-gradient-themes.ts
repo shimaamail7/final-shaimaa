@@ -3,7 +3,7 @@
 export type ReelGradientCssVars = Record<string, string>
 
 /** Craft section base — warm beige (Figma / brand cream) */
-export const REEL_CRAFT_BEIGE = "#F5F5DC"
+export const REEL_CRAFT_BEIGE = "#F3F3F3"
 
 export const REEL_GRADIENT_DARK: ReelGradientCssVars = {
   "--gradient-background-start": "rgb(0, 0, 0)",

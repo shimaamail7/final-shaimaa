@@ -43,7 +43,6 @@ export function useGSAP<T extends Element>(
 
 /**
  * Hook for scroll-triggered GSAP animations
- * Integrates with Lenis smooth scrolling
  */
 export function useScrollAnimation<T extends Element>(
   callback: (element: T, scrollTrigger: typeof ScrollTrigger) => gsap.core.Tween | gsap.core.Timeline,
@@ -62,7 +61,7 @@ export function useScrollAnimation<T extends Element>(
   useIsomorphicLayoutEffect(() => {
     if (!elementRef.current) return
 
-    // Refresh ScrollTrigger to account for Lenis
+    // Refresh ScrollTrigger
     ScrollTrigger.refresh()
 
     const animation = callback(elementRef.current, ScrollTrigger)
@@ -106,41 +105,4 @@ export function useGSAPTimeline<T extends Element>(
   }, deps)
 
   return [elementRef, timelineRef.current]
-}
-
-/**
- * Utility to integrate GSAP with Lenis scroll
- * Call this in components that need scroll-based animations
- */
-export function useLenisScrollTrigger(lenis: { raf: (time: number) => void } | null) {
-  useIsomorphicLayoutEffect(() => {
-    if (!lenis) return
-
-    // Sync ScrollTrigger with Lenis
-    ScrollTrigger.scrollerProxy(document.body, {
-      scrollTop(value) {
-        if (arguments.length) {
-          // ScrollTrigger is setting the scroll
-          return
-        }
-        return window.scrollY
-      },
-      getBoundingClientRect() {
-        return {
-          top: 0,
-          left: 0,
-          width: window.innerWidth,
-          height: window.innerHeight,
-        }
-      },
-    })
-
-    // Update ScrollTrigger when Lenis scrolls
-    ScrollTrigger.addEventListener("refresh", () => lenis.raf(performance.now()))
-    ScrollTrigger.refresh()
-
-    return () => {
-      ScrollTrigger.clearScrollMemory()
-    }
-  }, [lenis])
 }

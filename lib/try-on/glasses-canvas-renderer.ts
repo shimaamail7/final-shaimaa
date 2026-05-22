@@ -49,8 +49,10 @@ export class GlassesCanvasRenderer {
 
     this.renderer = new THREE.WebGLRenderer({
       alpha: true,
-      antialias: true,
+      antialias: false,
       preserveDrawingBuffer: true,
+      powerPreference: "default",
+      failIfMajorPerformanceCaveat: false,
     })
     this.renderer.setSize(RENDER_WIDTH, RENDER_HEIGHT, false)
     this.renderer.setPixelRatio(1)
@@ -60,7 +62,7 @@ export class GlassesCanvasRenderer {
     canvas.width = RENDER_WIDTH
     canvas.height = RENDER_HEIGHT
     canvas.style.cssText =
-      `position:fixed;left:-10000px;top:0;width:${RENDER_WIDTH}px;height:${RENDER_HEIGHT}px;opacity:0.01;pointer-events:none`
+      `position:fixed;left:0;top:0;width:${RENDER_WIDTH}px;height:${RENDER_HEIGHT}px;visibility:hidden;pointer-events:none;z-index:-1`
     document.body.appendChild(canvas)
 
     const ambient = new THREE.AmbientLight(0xffffff, 1.1)

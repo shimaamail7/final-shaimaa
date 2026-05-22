@@ -1,72 +1,77 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
+import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { Playfair_Display } from "next/font/google";
-import { preload } from "react-dom";
 
 const playfair = Playfair_Display({ subsets: ["latin"], weight: ["400", "500", "600"] });
 
-// 121 frames for the narrative sequence
-const FRAME_COUNT = 121;
+/**
+ * CinematicHero Configuration
+ * Centralizing constants ensures the component is open for extension but closed for modification.
+ */
+const CONFIG = {
+  FRAME_COUNT: 121,
+  FRAME_PATH: (i: number) => `/moments/${String(i + 1).padStart(5, "0")}.png`,
+  BG_COLOR: "#D9C5B2",
+  BLOOM_GRADIENT: "radial-gradient(circle at 65% 25%, rgba(255,160,50,0.6) 0%, rgba(230,120,20,0.1) 45%, transparent 75%)",
+  ANIMATION: {
+    DURATION: 8,
+    TEXT_Y_START: 20,
+    TEXT_DURATION: 2,
+  }
+};
 
-export default function CinematicHero() {
-
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const textRef = useRef<HTMLHeadingElement>(null);
-  const playheadRef = useRef({ frame: 0 });
+/**
+ * Custom hook to manage the preloading of the image sequence.
+ * Follows SRP by isolating the asset loading logic from the view.
+ */
+function useImageSequence() {
   const [images, setImages] = useState<HTMLImageElement[]>([]);
-  const [imagesLoaded, setImagesLoaded] = useState(0);
+  const [isLoaded, setIsLoaded] = useState(false);
 
-  // Use a mix-blend-mode overlay for ambient bloom pulsating
-  const bloomRef = useRef<HTMLDivElement>(null);
-
-  // 1. Preload images
   useEffect(() => {
-    const loadedImages: HTMLImageElement[] = [];
-    let loadedCount = 0;
+    const loadImages = async () => {
+      const promises = Array.from({ length: CONFIG.FRAME_COUNT }).map((_, i) => {
+        return new Promise<HTMLImageElement>((resolve) => {
+          const img = new Image();
+          img.src = CONFIG.FRAME_PATH(i);
+          img.onload = () => resolve(img);
+          img.onerror = () => resolve(img);
+        });
+      });
 
-    for (let i = 0; i < FRAME_COUNT; i++) {
-      const img = new Image();
+      const results = await Promise.all(promises);
+      setImages(results);
+      setIsLoaded(true);
+    };
 
-      // Define your asset path here. Format: `/moments/00001.png`
-      // We padstart with 5 zeros, e.g. 00001 to 00121
-      const frameIndex = String(i + 1).padStart(5, "0");
-      img.src = `/moments/${frameIndex}.png`;
-
-      img.onload = () => {
-        loadedCount++;
-        setImagesLoaded(loadedCount);
-      };
-      img.onerror = () => {
-        // Note: If image is missing, we silently continue so the canvas can render a fallback color
-        loadedCount++;
-        setImagesLoaded(loadedCount);
-      };
-
-      loadedImages.push(img);
-    }
-    setImages(loadedImages);
+    loadImages();
   }, []);
 
-  // 2. Canvas Rendering & GSAP
-  useEffect(() => {
-    if (images.length === 0) return;
+  return { images, isLoaded };
+}
 
+/**
+ * CinematicCanvas handles the rendering of frames to the HTML5 Canvas.
+ * Optimized for high DPI screens and responsive "cover" fitting.
+ */
+const CinematicCanvas = ({
+  images,
+  frame,
+  canvasRef
+}: {
+  images: HTMLImageElement[],
+  frame: number,
+  canvasRef: React.RefObject<HTMLCanvasElement>
+}) => {
+  useGSAP(() => {
     const canvas = canvasRef.current;
     const ctx = canvas?.getContext("2d");
     if (!canvas || !ctx) return;
 
-    // Responsive Canvas Resizing & "Cover" Algorithm
-    const renderFrame = () => {
-      const frameIndex = Math.min(
-        FRAME_COUNT - 1,
-        Math.max(0, Math.round(playheadRef.current.frame))
-      );
-      const img = images[frameIndex];
-
-      // Ensure canvas sharpness on high DPI screens (4K clarity)
+    const drawFrame = () => {
       const dpr = window.devicePixelRatio || 1;
       const rect = canvas.getBoundingClientRect();
 
@@ -76,132 +81,116 @@ export default function CinematicHero() {
         ctx.scale(dpr, dpr);
       }
 
-      const width = rect.width;
-      const height = rect.height;
-
-      // Ambient Fill: matches standard background
-      ctx.fillStyle = "#D9C5B2";
+      const { width, height } = rect;
+      ctx.fillStyle = CONFIG.BG_COLOR;
       ctx.fillRect(0, 0, width, height);
 
-      if (img && img.complete && img.naturalWidth > 0) {
-        // Calculate Cover Fit
+      const imgIndex = Math.min(CONFIG.FRAME_COUNT - 1, Math.max(0, Math.round(frame)));
+      const img = images[imgIndex];
+
+      if (img?.complete && img.naturalWidth > 0) {
         const canvasRatio = width / height;
         const imgRatio = img.naturalWidth / img.naturalHeight;
-
         let drawWidth = width;
         let drawHeight = height;
         let offsetX = 0;
         let offsetY = 0;
 
         if (imgRatio > canvasRatio) {
-          // Image is wider than canvas
           drawWidth = height * imgRatio;
           offsetX = (width - drawWidth) / 2;
         } else {
-          // Image is taller than canvas
           drawHeight = width / imgRatio;
           offsetY = (height - drawHeight) / 2;
         }
-
-        // Optional: apply slight warm tint or filter on canvas (done via CSS overlay below)
         ctx.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
-      } else {
-        // Fallback visualization if images are missing
-        ctx.fillStyle = "rgba(255, 255, 255, 0.1)";
-        ctx.font = "italic 16px serif";
-        ctx.textAlign = "center";
-        ctx.fillText(`Frame ${frameIndex} (Awaiting Image)`, width / 2, height / 2);
       }
     };
 
-    // Initial render
-    renderFrame();
+    drawFrame();
+    window.addEventListener("resize", drawFrame);
+    return () => window.removeEventListener("resize", drawFrame);
+  }, { dependencies: [frame, images], scope: canvasRef });
 
-    window.addEventListener("resize", renderFrame);
+  return <canvas ref={canvasRef} className="absolute inset-0 block w-full h-full pointer-events-none" />;
+};
 
-    // Context for cleanup
-    let ctxGsap = gsap.context(() => {
-      // Kinetic Sequence Timeline
-      // Phase 1 (0-60): The Turn
-      // Phase 2 (61-120): The Gaze
-      const tl = gsap.timeline({
+/**
+ * HeroTypography handles the presentational layer of the text overlay.
+ */
+const HeroTypography = ({ textRef }: { textRef: React.RefObject<HTMLDivElement> }) => (
+  <div
+    ref={textRef}
+    className="absolute inset-0 flex flex-col items-center justify-center text-center px-8 z-20 opacity-0"
+  >
+   
+    <h1 className="text-4xl md:text-6xl text-leftth lg:text-[72px] font-bold text-white max-w-4xl uppercase tracking-tight leading-[1.1] font-inter">
+      So you never<br />miss a moment
+    </h1>
+  </div>
+);
 
+export default function CinematicHero() {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const textRef = useRef<HTMLDivElement>(null);
+  const bloomRef = useRef<HTMLDivElement>(null);
+  const playhead = useRef({ frame: 0 });
 
-        yoyo: true // Allows a seamless, meditative loop lowering the book back
-      });
+  const { images, isLoaded } = useImageSequence();
 
-      tl.to(playheadRef.current, {
-        frame: FRAME_COUNT - 1,
-        duration: 8,
-        ease: "sine.inOut",
-        onUpdate: renderFrame
-      });
+  useGSAP(() => {
+    if (!isLoaded) return;
 
-      // Fade in text from below after sequence completes
-      tl.fromTo(textRef.current,
-        { opacity: 0, y: 20 },
-        { opacity: 1, y: 0, duration: 2, ease: "power2.out" }
-      );
+    // 1. Kinetic frame animation loop (Background)
+    gsap.to(playhead, {
+      frame: CONFIG.FRAME_COUNT - 1,
+      duration: CONFIG.ANIMATION.DURATION,
+      ease: "sine.inOut",
+      yoyo: true,
+      repeat: -1,
+    });
 
-      // Bloom Effect reflecting sunlight (plays once to match the timeline, no infinite repeating)
-      tl.to(bloomRef.current, {
-        opacity: 0.8,
-        duration: 8,
-        ease: "sine.inOut"
-      }, 0); // Start immediately with the sequence
-    }, containerRef);
+    // 2. Atmospheric bloom pulse (Background)
+    gsap.to(bloomRef.current, {
+      opacity: 0.8,
+      duration: CONFIG.ANIMATION.DURATION,
+      ease: "sine.inOut",
+      repeat: -1,
+      yoyo: true,
+    });
 
-    return () => {
-      window.removeEventListener("resize", renderFrame);
-      ctxGsap.revert();
-    };
-  }, [images]);
+    // 3. Typography entry sequence (Foreground)
+    // Start slightly delayed to allow the background to settle
+    gsap.fromTo(textRef.current,
+      { opacity: 0, y: CONFIG.ANIMATION.TEXT_Y_START },
+      {
+        opacity: 1,
+        y: 0,
+        duration: CONFIG.ANIMATION.TEXT_DURATION,
+        ease: "power2.out",
+        delay: 0.5
+      }
+    );
+  }, { scope: containerRef, dependencies: [isLoaded] });
 
   return (
-    <div ref={containerRef} className="relative w-full h-screen overflow-hidden bg-[#D9C5B2] select-none">
-
-      {/* Canvas Layer */}
-      <canvas
-        ref={canvasRef}
-        className="absolute inset-0 block w-full h-full pointer-events-none"
+    <div
+      ref={containerRef}
+      className="relative w-full h-[70vh] md:h-[80vh] overflow-hidden select-none mx-auto"
+      style={{ backgroundColor: CONFIG.BG_COLOR }}
+    >
+      <CinematicCanvas
+        images={images}
+        frame={playhead.current.frame}
+        canvasRef={canvasRef}
       />
-
-      {/* The Ambient Bloom Effect (mix-blend: screen orange gradient) */}
       <div
         ref={bloomRef}
-        className="absolute inset-0 pointer-events-none  opacity-40 transition-opacity"
-        style={{
-          background: "radial-gradient(circle at 65% 25%, rgba(255,160,50,0.6) 0%, rgba(230,120,20,0.1) 45%, transparent 75%)"
-        }}
+        className="absolute inset-0 pointer-events-none opacity-40 transition-opacity z-10"
+        style={{ background: CONFIG.BLOOM_GRADIENT }}
       />
-
-      {/* Typography Overlay - Matching Design */}
-      <div
-        ref={textRef}
-        className="absolute inset-0 flex flex-col justify-end pointer-events-auto pl-8 md:pl-20 lg:pl-32 xl:pl-40 z-20 pb-20 opacity-0"
-      >
-        <p className={`text-[#D0BCA0] text-xs md:text-sm font-medium tracking-wide mb-2 ${playfair.className}`}>
-          We do our best
-        </p>
-
-        <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold text-white max-w-2xl uppercase tracking-tight leading-[1.1] mb-5 font-inter">
-          So you never<br />miss a moment
-        </h1>
-
-        <p className="text-[#E6E6E6] max-w-[280px] md:max-w-sm text-xs md:text-sm font-light mb-6 leading-[1.6] font-inter">
-          Optika delivers to you Premium Digital<br />
-          Lenses and Solutions manufactured to the<br />
-          highest standards.
-        </p>
-
-        <button className="flex items-center gap-3 text-white/80 hover:text-white transition-colors group cursor-pointer w-max">
-          <span className="flex items-center justify-center w-7 h-7 border border-white/30 group-hover:border-white transition-colors text-[10px]">
-            &#8595;
-          </span>
-          <span className="text-xs tracking-wide font-inter font-light">Learn More</span>
-        </button>
-      </div>
-
+      <HeroTypography textRef={textRef} />
     </div>
   );
 }
