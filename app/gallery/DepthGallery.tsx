@@ -336,7 +336,7 @@ export const DepthGallery = forwardRef<DepthGalleryHandle, {}>((_, ref) => {
 
     // ── State ──────────────────────────────────────────────────────────────
     let running = true
-    const PLANE_GAP = 5
+    const getPlaneGap = () => (window.innerWidth <= MOBILE_BP ? 3.5 : 5)
     const MOBILE_BP = 768
     const DESKTOP_SCALE = 1
     const MOBILE_SCALE = 0.65
@@ -470,9 +470,10 @@ export const DepthGallery = forwardRef<DepthGalleryHandle, {}>((_, ref) => {
 
     function layoutPlanes() {
       const xs = getXSpread()
+      const gap = getPlaneGap()
       planes.forEach((p, i) => {
         const bp = p.userData.basePosition ?? { x: 0, y: 0 }
-        p.position.set(bp.x * xs, bp.y, -i * PLANE_GAP)
+        p.position.set(bp.x * xs, bp.y, -i * gap)
       })
     }
 
@@ -491,7 +492,7 @@ export const DepthGallery = forwardRef<DepthGalleryHandle, {}>((_, ref) => {
 
     function getPlaneBlendData(cz: number) {
       if (!planes.length) return null
-      const gap = Math.max(PLANE_GAP, 0.0001)
+      const gap = Math.max(getPlaneGap(), 0.0001)
       const first = planes[0].position.z
       const lastIdx = planes.length - 1
       const sampled = cz - gap * 1
@@ -503,7 +504,7 @@ export const DepthGallery = forwardRef<DepthGalleryHandle, {}>((_, ref) => {
 
     function getMoodBlendData(cz: number) {
       if (!planes.length) return null
-      const gap = Math.max(PLANE_GAP, 0.0001)
+      const gap = Math.max(getPlaneGap(), 0.0001)
       const first = planes[0].position.z
       const lastIdx = planes.length - 1
       const sampled = cz - gap * 1
@@ -541,15 +542,20 @@ export const DepthGallery = forwardRef<DepthGalleryHandle, {}>((_, ref) => {
     }
 
     // ── Background Image Overlay ───────────────────────────────────────────
-    const bgImageOverlay = document.createElement('div')
-    bgImageOverlay.className = 'depth-gallery-bg'
-    bgImageOverlay.style.cssText = `
-      position: fixed; inset: -5%; z-index: -1; 
-      background-size: cover; background-position: center; 
-      transition: background-image 800ms ease;
-      filter: brightness(0.5) blur(20px);
-    `
-    document.body.appendChild(bgImageOverlay)
+    const bgOverlays = [0, 1].map((i) => {
+      const el = document.createElement('div')
+      el.className = `depth-gallery-bg depth-gallery-bg-${i}`
+      el.style.cssText = `
+        position: fixed; inset: -5%; z-index: -1;
+        background-size: cover; background-position: center;
+        transition: opacity 800ms ease;
+        filter: brightness(0.5) blur(20px);
+        opacity: ${i === 0 ? '1' : '0'};
+      `
+      document.body.appendChild(el)
+      return el
+    })
+    let activeBgIndex = 0
 
     // ── Label overlay ──────────────────────────────────────────────────────
     const labelOverlay = document.createElement('section')
@@ -613,7 +619,13 @@ export const DepthGallery = forwardRef<DepthGalleryHandle, {}>((_, ref) => {
       labelOverlay.style.color = label?.color ?? '#ffffff'
 
       const bgImg = planes[ti].userData.backgroundImage
-      if (bgImg) bgImageOverlay.style.backgroundImage = `url(${bgImg})`
+      if (bgImg) {
+        const nextBgIndex = 1 - activeBgIndex
+        bgOverlays[nextBgIndex].style.backgroundImage = `url(${bgImg})`
+        bgOverlays[nextBgIndex].style.opacity = '1'
+        bgOverlays[activeBgIndex].style.opacity = '0'
+        activeBgIndex = nextBgIndex
+      }
     }
 
     // ── Input Events ───────────────────────────────────────────────────────
@@ -806,7 +818,7 @@ export const DepthGallery = forwardRef<DepthGalleryHandle, {}>((_, ref) => {
       window.removeEventListener('pointerleave', onPointerLeave)
       window.removeEventListener('resize', resize)
       labelOverlay.remove()
-      bgImageOverlay.remove()
+      bgOverlays.forEach(el => el.remove())
       trail.dispose()
       planes.forEach((p) => {
         const mat = p.material as THREE.MeshBasicMaterial

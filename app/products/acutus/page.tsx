@@ -25,13 +25,28 @@ export default function AcutusPage() {
   const depthGalleryRef = useRef<{ setProgress: (v: number) => void }>(null)
 
   useGSAP(() => {
+    const target = galleryRef.current
+    if (!target) return
+
+    gsap.set(target, { opacity: 0 })
+
     ScrollTrigger.create({
-      trigger: galleryRef.current,
+      trigger: target,
       start: "top top",
       end: "+=300%",
       pin: true,
       scrub: true,
-      onUpdate: (self) => depthGalleryRef.current?.setProgress(self.progress),
+      onUpdate: (self) => {
+        const progress = self.progress
+        const easedProgress = progress < 0.5
+          ? 2 * progress * progress
+          : 1 - Math.pow(-2 * progress + 2, 2) / 2
+        depthGalleryRef.current?.setProgress(easedProgress)
+      },
+      onEnter: () => gsap.to(target, { opacity: 1, duration: 0.6, ease: "power2.out" }),
+      onLeave: () => gsap.to(target, { opacity: 0, duration: 0.6, ease: "power2.in" }),
+      onEnterBack: () => gsap.to(target, { opacity: 1, duration: 0.6, ease: "power2.out" }),
+      onLeaveBack: () => gsap.to(target, { opacity: 0, duration: 0.6, ease: "power2.in" }),
     })
   }, { scope: galleryRef })
 
