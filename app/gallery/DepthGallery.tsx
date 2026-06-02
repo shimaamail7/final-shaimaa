@@ -4,10 +4,26 @@ import { useEffect, useRef } from 'react'
 import * as THREE from 'three'
 
 // ─── Gallery Data ────────────────────────────────────────────────────────────
-const GALLERY_PLANES = [
+interface GalleryPlaneConfig {
+  textureSrc: string;
+  fallbackColor?: string;
+  accentColor?: string;
+  position: { x: number; y: number };
+  backgroundImage?: string;
+  backgroundColor?: string;
+  blob1Color?: string;
+  blob2Color?: string;
+  label: {
+    word: string;
+    pms: string;
+    desc: string;
+    color: string;
+  };
+}
+
+const GALLERY_PLANES: GalleryPlaneConfig[] = [
   {
     textureSrc: '/acutus-plus.png',
-    // fallbackColor: '#3b82f6',
     accentColor: '#e89b71',
     position: { x: 0.8, y: 0 },
     backgroundImage: '/acutus-plus.png',
@@ -15,12 +31,7 @@ const GALLERY_PLANES = [
   },
   {
     textureSrc: '/model1.png',
-    // fallbackColor: '#10b981',
-    // accentColor: '#10b981',
     position: { x: 0.8, y: 0 },
-    // backgroundColor: '#f8fafc',
-    // blob1Color: '#d1fae5',
-    // blob2Color: '#a7f3d0',
     label: { word: 'ACUTUS SMART', pms: 'DIGITAL SINGLE VISION', desc: 'Precision surfacing for crisp everyday clarity with minimal peripheral distortion.', color: '#ffffff' },
   },
   {
@@ -406,7 +417,7 @@ export default function DepthGallery({ progress }: DepthGalleryProps) {
         fallbackColor: cfg.fallbackColor,
         accentColor: cfg.accentColor,
         backgroundColor: cfg.backgroundColor || '#000000',
-        backgroundImage: (cfg as any).backgroundImage || cfg.textureSrc,
+        backgroundImage: cfg.backgroundImage || cfg.textureSrc,
         blob1Color: cfg.blob1Color,
         blob2Color: cfg.blob2Color,
         label: cfg.label,
@@ -778,7 +789,6 @@ export default function DepthGallery({ progress }: DepthGalleryProps) {
 
       // ── Render ───────────────────────────────────────────────────────────
       renderer.clear(true, true, true)
-      // renderer.render(bgScene, bgCamera) // Background image overlay used instead
       renderer.clearDepth()
       renderer.render(scene, camera)
 
@@ -797,6 +807,11 @@ export default function DepthGallery({ progress }: DepthGalleryProps) {
       labelOverlay.remove()
       bgImageOverlay.remove()
       trail.dispose()
+      planes.forEach((p) => {
+        const mat = p.material as THREE.MeshBasicMaterial
+        if (mat.map) mat.map.dispose()
+        mat.dispose()
+      })
       bgMaterial.dispose()
       planeGeo.dispose()
       renderer.dispose()
