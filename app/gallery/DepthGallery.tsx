@@ -306,7 +306,11 @@ class Trail {
 }
 
 // ─── Main Component ───────────────────────────────────────────────────────────
-export default function DepthGallery({ progress }: { progress: number }) {
+interface DepthGalleryProps {
+  progress: number
+}
+
+export default function DepthGallery({ progress }: DepthGalleryProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const progressRef = useRef(progress)
 
