@@ -1,8 +1,10 @@
 import type { Metadata } from "next"
-import { useRef, useState } from "react"
+import { useRef } from "react"
 import gsap from "gsap"
 import { ScrollTrigger } from "gsap/ScrollTrigger"
 import { useGSAP } from "@gsap/react"
+
+gsap.registerPlugin(ScrollTrigger)
 import HeroSection from "./hero"
 import { HowItWorks } from "@/components/HowItWorks"
 import AcutusSeriesSection from "./series-section"
@@ -20,17 +22,16 @@ export const metadata: Metadata = {
 
 export default function AcutusPage() {
   const galleryRef = useRef<HTMLDivElement>(null)
-  const [progress, setProgress] = useState(0)
+  const depthGalleryRef = useRef<{ setProgress: (v: number) => void }>(null)
 
   useGSAP(() => {
-    gsap.registerPlugin(ScrollTrigger)
     ScrollTrigger.create({
       trigger: galleryRef.current,
       start: "top top",
       end: "+=300%",
       pin: true,
       scrub: true,
-      onUpdate: (self) => setProgress(self.progress),
+      onUpdate: (self) => depthGalleryRef.current?.setProgress(self.progress),
     })
   }, { scope: galleryRef })
 
@@ -39,7 +40,7 @@ export default function AcutusPage() {
       <HeroSection />
 
       <div ref={galleryRef} className="h-screen w-full overflow-hidden">
-        <DepthGallery progress={progress} />
+        <DepthGallery ref={depthGalleryRef} />
       </div>
 
       <HowItWorks

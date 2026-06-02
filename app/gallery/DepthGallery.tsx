@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, forwardRef, useImperativeHandle } from 'react'
 import * as THREE from 'three'
 
 // ─── Gallery Data ────────────────────────────────────────────────────────────
@@ -316,18 +316,19 @@ class Trail {
   dispose() { this.reset(); this.material.dispose() }
 }
 
-// ─── Main Component ───────────────────────────────────────────────────────────
-interface DepthGalleryProps {
-  progress: number
+interface DepthGalleryHandle {
+  setProgress: (value: number) => void;
 }
 
-export default function DepthGallery({ progress }: DepthGalleryProps) {
+export const DepthGallery = forwardRef<DepthGalleryHandle, {}>((_, ref) => {
   const canvasRef = useRef<HTMLCanvasElement>(null)
-  const progressRef = useRef(progress)
+  const progressRef = useRef(0)
 
-  useEffect(() => {
-    progressRef.current = progress
-  }, [progress])
+  useImperativeHandle(ref, () => ({
+    setProgress(value: number) {
+      progressRef.current = value;
+    }
+  }));
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -832,4 +833,6 @@ export default function DepthGallery({ progress }: DepthGalleryProps) {
       }}
     />
   )
-}
+})
+
+export default DepthGallery
