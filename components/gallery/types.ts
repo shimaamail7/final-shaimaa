@@ -1,10 +1,10 @@
 export interface Product {
-  number: string;
+  productNumber: string;
   title: string;
   subtitle: string;
   description: string;
-  image: string;
-  href: string;
+  imageSrc: string;
+  productUrl: string;
 }
 
 export interface GalleryState {
