@@ -25,7 +25,7 @@ export default function AcutusClient() {
 
   return (<>      
 
-    <div className="relative min-h-screen bg-black text-white overflow-x-hidden">
+    <div className="relative min-h-screen bg-black text-white">
       <HeroSection />
 
       <IrisCursor />
