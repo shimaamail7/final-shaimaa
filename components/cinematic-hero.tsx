@@ -59,19 +59,19 @@ function useImageSequence() {
  */
 const CinematicCanvas = ({
   images,
-  frame,
+  isLoaded,
   canvasRef
 }: {
   images: HTMLImageElement[],
-  frame: number,
-  canvasRef: React.RefObject<HTMLCanvasElement>
+  isLoaded: boolean,
+  canvasRef: React.RefObject<HTMLCanvasElement | null>
 }) => {
   useGSAP(() => {
     const canvas = canvasRef.current;
     const ctx = canvas?.getContext("2d");
-    if (!canvas || !ctx) return;
+    if (!canvas || !ctx || !isLoaded) return;
 
-    const drawFrame = () => {
+    const drawFrame = (frameIndex: number) => {
       const dpr = window.devicePixelRatio || 1;
       const rect = canvas.getBoundingClientRect();
 
@@ -85,7 +85,7 @@ const CinematicCanvas = ({
       ctx.fillStyle = CONFIG.BG_COLOR;
       ctx.fillRect(0, 0, width, height);
 
-      const imgIndex = Math.min(CONFIG.FRAME_COUNT - 1, Math.max(0, Math.round(frame)));
+      const imgIndex = Math.min(CONFIG.FRAME_COUNT - 1, Math.max(0, Math.round(frameIndex)));
       const img = images[imgIndex];
 
       if (img?.complete && img.naturalWidth > 0) {
@@ -107,10 +107,39 @@ const CinematicCanvas = ({
       }
     };
 
-    drawFrame();
-    window.addEventListener("resize", drawFrame);
-    return () => window.removeEventListener("resize", drawFrame);
-  }, { dependencies: [frame, images], scope: canvasRef });
+    const playhead = { frame: 0 };
+    drawFrame(0);
+
+    const anim = gsap.to(playhead, {
+      frame: CONFIG.FRAME_COUNT - 1,
+      duration: CONFIG.ANIMATION.DURATION,
+      ease: "sine.inOut",
+      yoyo: true,
+      repeat: -1,
+      paused: true,
+      onUpdate: () => drawFrame(playhead.frame)
+    });
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          anim.play();
+        } else {
+          anim.pause();
+        }
+      });
+    });
+    observer.observe(canvas);
+
+    const handleResize = () => drawFrame(playhead.frame);
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      observer.disconnect();
+      anim.kill();
+    };
+  }, { dependencies: [images, isLoaded], scope: canvasRef });
 
   return <canvas ref={canvasRef} className="absolute inset-0 block w-full h-full pointer-events-none" />;
 };
@@ -118,7 +147,7 @@ const CinematicCanvas = ({
 /**
  * HeroTypography handles the presentational layer of the text overlay.
  */
-const HeroTypography = ({ textRef }: { textRef: React.RefObject<HTMLDivElement> }) => (
+const HeroTypography = ({ textRef }: { textRef: React.RefObject<HTMLDivElement | null> }) => (
   <div
     ref={textRef}
     className="absolute inset-0 flex flex-col items-center justify-center text-center px-8 z-20 opacity-0"
@@ -135,43 +164,58 @@ export default function CinematicHero() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const textRef = useRef<HTMLDivElement>(null);
   const bloomRef = useRef<HTMLDivElement>(null);
-  const playhead = useRef({ frame: 0 });
 
   const { images, isLoaded } = useImageSequence();
 
   useGSAP(() => {
-    if (!isLoaded) return;
+    if (!isLoaded || !containerRef.current) return;
 
-    // 1. Kinetic frame animation loop (Background)
-    gsap.to(playhead, {
-      frame: CONFIG.FRAME_COUNT - 1,
-      duration: CONFIG.ANIMATION.DURATION,
-      ease: "sine.inOut",
-      yoyo: true,
-      repeat: -1,
-    });
-
-    // 2. Atmospheric bloom pulse (Background)
-    gsap.to(bloomRef.current, {
+    // 1. Atmospheric bloom pulse (Background)
+    const bloomAnim = gsap.to(bloomRef.current, {
       opacity: 0.8,
       duration: CONFIG.ANIMATION.DURATION,
       ease: "sine.inOut",
       repeat: -1,
       yoyo: true,
+      paused: true,
     });
 
-    // 3. Typography entry sequence (Foreground)
-    // Start slightly delayed to allow the background to settle
-    gsap.fromTo(textRef.current,
+    let textPlayed = false;
+
+    // 2. Typography entry sequence (Foreground)
+    const textAnim = gsap.fromTo(textRef.current,
       { opacity: 0, y: CONFIG.ANIMATION.TEXT_Y_START },
       {
         opacity: 1,
         y: 0,
         duration: CONFIG.ANIMATION.TEXT_DURATION,
         ease: "power2.out",
-        delay: 0.5
+        delay: CONFIG.ANIMATION.DURATION,
+        paused: true
       }
     );
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          bloomAnim.play();
+          if (!textPlayed) {
+            textAnim.play();
+            textPlayed = true;
+          }
+        } else {
+          bloomAnim.pause();
+        }
+      });
+    });
+
+    observer.observe(containerRef.current);
+
+    return () => {
+      observer.disconnect();
+      bloomAnim.kill();
+      textAnim.kill();
+    };
   }, { scope: containerRef, dependencies: [isLoaded] });
 
   return (
@@ -182,7 +226,7 @@ export default function CinematicHero() {
     >
       <CinematicCanvas
         images={images}
-        frame={playhead.current.frame}
+        isLoaded={isLoaded}
         canvasRef={canvasRef}
       />
       <div

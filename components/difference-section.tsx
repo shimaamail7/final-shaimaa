@@ -1,40 +1,37 @@
 "use client"
 
-import { useEffect, useRef } from "react"
-import CinematicHero from "./cinematic-hero"
+import Image from "next/image";
 
 export function DifferenceSection() {
-  const videoRef = useRef<HTMLVideoElement>(null)
-
-  useEffect(() => {
-    const videoNode = videoRef.current
-    if (!videoNode) return
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            videoNode.play().catch(() => {
-              // Ignore play errors (e.g. autoplay blocked before interaction)
-            })
-          } else {
-            videoNode.pause()
-          }
-        })
-      },
-      { threshold: 0.1 }
-    )
-
-    observer.observe(videoNode)
-
-    return () => {
-      observer.disconnect()
-    }
-  }, [])
-
   return (
-    <section id="difference" className="relative z-20 flex w-full h-screen items-center justify-center px-4 py-20 sm:px-6 md:px-8 text-center overflow-hidden bg-black" style={{ willChange: "transform" }}>
-      <CinematicHero />
+    <section id="difference" className="relative z-20 w-full h-screen overflow-hidden bg-black">
+      {/* <div className="absolute inset-0 w-full h-full">
+        <Image
+          src="/home.jpeg"
+          alt="Difference background"
+          fill
+          className="object-cover"
+          priority
+          sizes="100vw"
+        />
+      </div> */}
+
+      {/* Fullscreen background video: autoplay, muted, loop, playsInline
+          Keep the commented Image above for fallback/reference. Replace
+          `/videos/difference.mp4` with your actual video in `public/`.
+      */}
+      <video
+        className="absolute inset-0 w-full h-full object-contain"
+        src="/home4.mp4"
+        autoPlay
+        muted
+        loop
+        playsInline
+        aria-hidden="true"
+      />
+
+      {/* Optional overlay to ensure readable content can be placed here */}
+      <div className="absolute inset-0 bg-black/20 pointer-events-none" />
     </section>
   )
 }

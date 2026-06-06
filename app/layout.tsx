@@ -5,6 +5,7 @@ import './globals.css'
 import { Navigation } from '@/components/navigation';
 
 
+
 const geist = Geist({
   subsets: ["latin"],
   display: "swap",
@@ -67,7 +68,7 @@ export default function RootLayout({
       </head>
       {/* Apply the font variables to the body so they can be accessed anywhere */}
       <body className={`${inter.className}  ${playfair.variable} antialiased`} suppressHydrationWarning>
-        <Navigation /> 
+        <Navigation />
         {children}
         <Analytics />
 

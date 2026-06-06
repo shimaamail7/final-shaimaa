@@ -23,12 +23,12 @@ const ArrowButton = ({
 
   const content = (
     <>
-      <span className={`flex h-5 w-5 sm:h-8 sm:w-8 items-center justify-center transition-transform group-hover:scale-105 ${
+      <span className={`flex h-8 w-8 items-center justify-center transition-transform group-hover:scale-105 ${
         isDark
           ? 'bg-black text-white group-hover:bg-gray-200 border group-hover:border-black/40 group-hover:text-black'
           : 'bg-white text-black group-hover:border group-hover:text-white group-hover:bg-black/10'
       }`}>
-        <Icon className="h-3 w-3 sm:h-4 sm:w-4" />
+        <Icon className="h-4 w-4" />
       </span>
       <span className={isDark ? 'text-[var(--text-dark)]' : 'text-white'}>{label}</span>
     </>

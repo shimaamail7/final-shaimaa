@@ -10,9 +10,8 @@ import { HeroSection } from "@/components/hero-section";
 import { AboutSection } from "@/components/about-section";
 import { DifferenceSection } from "@/components/difference-section";
 import { PartnersSection } from "@/components/partners-section";
-import { DifferencePartnerWrapper } from "@/components/difference-partner-wrapper";
 import { useStickySections } from "@/hooks/use-sticky-sections";
-
+import { faqs } from "@/components/faq-section";
 import { Skeleton } from "@/components/ui/skeleton";
 
 const SectionSkeleton = () => <Skeleton className="w-full h-[50vh] rounded-none bg-zinc-900/50" />;
@@ -35,7 +34,9 @@ const heroSectionConfig = {
   ),
   description: "Optika delivers to you Premium Digital Lenses and Solutions manufactured to the highest standards.",
   ctaText: "Learn More",
-  ctaHref: "#about", heroSpacer: true, 
+  ctaHref: "#about",
+  alignLeft: false,
+
 };
 
 
@@ -50,28 +51,14 @@ const Solutions = dynamic(() =>
   import("@/components/Solutions").then((mod) => mod.default || mod),
   { loading: SectionSkeleton }
 );
-const ProductsTabsSection = dynamic(() =>
-  import("@/components/products-tabs-section").then(
-    (mod) => mod.ProductsTabsSection,
-  ),
-  { loading: SectionSkeleton }
-);
-const WorkflowSection = dynamic(() =>
-  import("@/components/workflow").then((mod) => mod.WorkflowSection),
-  { loading: SectionSkeleton }
-);
+
 const PerformanceSection = dynamic(() =>
   import("@/components/performance-section").then(
     (mod) => mod.PerformanceSection,
   ),
   { loading: SectionSkeleton }
 );
-const CommitmentSection = dynamic(() =>
-  import("@/components/commitment-section").then(
-    (mod) => mod.CommitmentSection,
-  ),
-  { loading: SectionSkeleton }
-);
+
 const FaqSection = dynamic(() =>
   import("@/components/faq-section").then((mod) => mod.FaqSection),
   { loading: SectionSkeleton }
@@ -144,17 +131,15 @@ export default function Home() {
 
       {(step === "loader-only" || step === "fading-in" || step === "hero") && (
         <MainLayout>
-          <HeroSection config={heroSectionConfig}  />
+          <HeroSection config={heroSectionConfig} />
           <AboutSection />
-
           <DifferenceSection />
           <PartnersSection />
-
           <LensCategoriesSection />
 
-          <Solutions />
+          <Solutions className="px-6 lg:px-26 2xl:px-50" />
           <PerformanceSection />
-          <FaqSection />
+          <FaqSection faqs={faqs} />
           <ContactSection />
         </MainLayout>
       )}

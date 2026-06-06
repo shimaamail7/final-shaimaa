@@ -1,46 +1,34 @@
-# Design Spec: Acutus Gallery Integration
+# Design Specification: Acutus Depth Gallery Integration
 Date: 2026-06-02
-Status: Draft
+Status: Finalized
 
 ## 1. Overview
-Integrate the `DepthGallery` 3D experience as a seamless, pinned section within the Acutus product page (`app/products/acutus/page.tsx`). The goal is to transition the gallery from a standalone page to a controlled section where the user's vertical page scroll drives the 3D depth animation.
+Integrate the `DepthGallery` 3D experience into the Acutus product page as a pinned "scrollytelling" section. The user "dives" through a sequence of lens planes, creating an immersive transition between the hero section and the product details.
 
-## 2. Architecture Shift: Controlled Component
-The `DepthGallery` component will be refactored from a "Self-Driving" model to a "Controlled" model.
+## 2. Technical Architecture
 
-### 2.1 Refactoring `DepthGallery.tsx`
-- **Input Removal**: Remove all internal window listeners for `wheel`, `touchstart`, and `touchmove`.
-- **Progress Prop**: Introduce a `progress` prop (range `0.0` to `1.0`).
-- **Animation Loop Update**: 
-    - The `scrollCurrent` and `scrollTarget` internal state will be replaced by the `progress` prop.
-    - The camera position will be calculated as: 
-      `camera.position.z = lerp(maxCameraZ, minCameraZ, progress)`
-    - Other depth-dependent effects (plane visibility, label updates, background mood) will now trigger based on this synchronized `progress` value.
+### 2.1 Orchestration
+- **`AcutusClient.tsx`**: Acts as the orchestrator. It manages the global scroll state using GSAP `ScrollTrigger`.
+- **`DepthGallery.tsx`**: A specialized 3D component that renders the lenses and the background "mood" environment.
 
-## 3. Page Integration & Pinning
-The gallery will be embedded into the Acutus page flow using GSAP `ScrollTrigger`.
+### 2.2 The "Dive" Mechanism
+- **Pinning**: The gallery section is pinned to the viewport using `ScrollTrigger.create({ pin: true })`.
+- **Progress Mapping**: The scroll offset (from `top top` to `+=300%`) is mapped to a `0.0` to `1.0` progress value.
+- **Easing**: An `easeInOutCubic` curve is applied to the raw scroll progress to make the movement feel organic and weighted.
+- **Imperative Control**: `AcutusClient` communicates the eased progress to `DepthGallery` via a `ref` and a `setProgress` method exposed through `useImperativeHandle`.
 
-### 3.1 `GallerySection` Wrapper
-A new wrapper component (or a section within `AcutusPage`) will manage the pinning and progress tracking.
+### 2.3 3D Scene Implementation
+- **Camera Control**: The `camera.position.z` is driven by the provided progress, interpolating between `maxCameraZ` (nearest plane) and `minCameraZ` (deepest plane).
+- **Plane Management**: Lenses are positioned at fixed intervals (`PLANE_GAP = 5`).
+- **Visibility/Blending**: Plane opacity is blended based on the camera's proximity to each plane's Z-position.
+- **Background Mood**: A custom GLSL shader (`FRAGMENT_SHADER`) creates a dynamic, blurred background. This is augmented by DOM-based background image overlays that transition as the user enters a new "plane's" influence.
 
-### 3.2 GSAP Configuration
-- **Trigger**: The `GallerySection` element.
-- **Start**: `"top top"` (pins when the section reaches the top of the viewport).
-- **End**: `"+=300%"` (defines a scroll duration of 3 viewport heights).
-- **Pin**: `true` (fixes the gallery in place during the transition).
-- **Scrub**: `true` or a small value (e.g., `0.1`) to ensure the 3D movement feels smooth and tied to the scrollbar.
+## 3. UI/UX Details
+- **Visual Hierarchy**: Focus is maintained on the current lens plane; peripheral planes fade in/out.
+- **Responsive Scaling**: Plane sizes and layout spreads are adjusted for mobile (`MOBILE_SCALE = 0.65`) vs desktop.
+- **Label Overlay**: A fixed-position UI overlay updates the lens name, specs, and accent color based on the active plane.
 
-### 3.3 Progress Bridge
-Using `useGSAP`, we will track the `ScrollTrigger`'s `progress` value and pass it into the `DepthGallery` component as a prop.
-
-## 4. Visual & UX Refinements
-- **Transition Fades**: Implement smooth opacity transitions for labels and background overlays as the user enters and exits the gallery section.
-- **Z-Curve Easing**: Apply a slight easing function to the `progress` value before passing it to the camera to make the transition between lenses feel more organic.
-- **Responsive Calibration**: Maintain existing responsive logic (`isMobile`, `MOBILE_SCALE`) but ensure the `PLANE_GAP` is optimized for the pinned viewport.
-
-## 5. Success Criteria
-- [ ] User can scroll from Hero $\rightarrow$ Gallery $\rightarrow$ HowItWorks without any jumps or "scroll-jacking" feel.
-- [ ] The 3D depth animation is perfectly synced with the page scroll.
-- [ ] All 11 lenses in the gallery are traversed during the 300% scroll distance.
-- [ ] Responsive behavior is preserved across mobile and desktop.
-- [ ] No console errors or memory leaks from redundant event listeners.
+## 4. Performance Optimizations
+- **Imperative Updates**: `setProgress` updates a `ref` inside `DepthGallery` rather than triggering React state updates, preventing page re-renders during the 60fps animation loop.
+- **Asset Loading**: Textures are loaded asynchronously via `TextureLoader.loadAsync`.
+- **Cleanup**: All Three.js geometries, materials, and GSAP triggers are disposed of on component unmount to prevent memory leaks.

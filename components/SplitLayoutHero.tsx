@@ -1,8 +1,12 @@
+"use client";
+
 import React from 'react';
 import Image from 'next/image';
 import ArrowButton from './ArrowButton';
-import { useRouter } from 'next/navigation'
- 
+import { useRouter } from 'next/navigation';
+import Tagline from './Tagline';
+import Headline from './Headline';
+import Description from './Description';
 
 interface Props {
   id?: string;
@@ -14,6 +18,8 @@ interface Props {
   buttonLabel: string;
   pageName: string;
   className?: string;
+  reverseLayout?: boolean;
+  contentClassName?: string; textSize?: string;
 }
 
 const SplitLayoutHero = ({
@@ -26,14 +32,20 @@ const SplitLayoutHero = ({
   buttonLabel,
   pageName,
   className = '',
+  reverseLayout = false,
+  contentClassName = '',
+  textSize = 'text-[40px]',
 }: Props) => {
   const router = useRouter();
+
+  const defaultSpacing = "lg:ml-[58px] px-6 py-16 sm:px-8 sm:py-20 md:px-12 md:py-24 lg:px-16 lg:py-0 xl:px-20 2xl:px-28";
+  const wrapperClass = contentClassName || defaultSpacing;
 
   return (
     <section id={id} className={`relative z-10 w-full bg-black ${className}`} style={{ willChange: 'transform' }}>
       <div className="grid min-h-screen grid-cols-1 lg:grid-cols-2">
-        {/* Left Side - Image */}
-        <div className="relative min-h-[50vh] w-full lg:min-h-screen">
+        {/* Image Side */}
+        <div className={`relative min-h-[50vh] w-full lg:min-h-screen ${reverseLayout ? 'lg:order-2' : ''}`}>
           <Image
             src={imageSrc}
             alt={imageAlt}
@@ -45,23 +57,23 @@ const SplitLayoutHero = ({
           />
         </div>
 
-        {/* Right Side - Content */}
-        <div className="flex lg:ml-[58px] items-center justify-center bg-black px-6 py-16 sm:px-8 sm:py-20 md:px-12 md:py-24 lg:px-16 lg:py-0 xl:px-20 2xl:px-28">
+        {/* Content Side */}
+        <div className={`flex items-center justify-center bg-black ${reverseLayout ? 'lg:order-1' : ''} ${wrapperClass}`}>
           <div className="w-full max-w-md lg:max-w-lg xl:max-w-xl 2xl:max-w-2xl font-playfair">
             {/* Tagline */}
-            <p className="mb-4 md:mb-8 2xl:text-[20px] text-[16px] font-medium leading-[1.36] tracking-[0.11em] text-white/70 font-playfair uppercase whitespace-pre-line">
+            <Tagline theme="dark" className="whitespace-pre-line font-medium leading-[1.36]">
               {tagline}
-            </p>
+            </Tagline>
 
             {/* Main Heading */}
-            <h2 className="relative z-10 mb-4 md:mb-8 font-inter 2xl:text-[64px] text-[40px] font-bold leading-[0.98] tracking-[-0.04em] text-white uppercase whitespace-pre-line">
+            <Headline as="h2" theme="dark" className="whitespace-pre-line tracking-[-0.04em]">
               {heading}
-            </h2>
+            </Headline>
 
             {/* Description */}
-            <p className="mb-8 md:mb-16 max-w-[400px] font-inter 2xl:text-[20px] text-[16px] font-medium leading-[1.5] tracking-[0.02em] text-white/70">
+            <Description theme="dark" maxWidth="max-w-[400px]" className="mb-8 md:mb-16 font-medium">
               {description}
-            </p>
+            </Description>
 
             {/* CTA Button */}
             <ArrowButton label={buttonLabel} onClick={() => router.push(`/${pageName}`)} />

@@ -1,4 +1,4 @@
-const faqs = [
+export const faqs = [
     {
         question: "What makes Optika lenses different?",
         answer:
@@ -41,9 +41,9 @@ const faqs = [
     },
 ]
 
-export function FaqSection() {
+export function FaqSection({faqs = []}: {faqs?: {question: string, answer: string}[]}) {
     return (
-        <section className="w-full min-h-screen lg:px-26 2xl:px-50  bg-white ">
+        <section className="w-full min-h-screen lg:px-26 2xl:px-50 px-6  bg-white ">
             <div className="w-full py-16 sm:py-20 lg:py-24">
                 {/* Header */}
                 <div className="mb-10 sm:mb-12 lg:mb-14">

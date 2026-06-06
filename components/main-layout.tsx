@@ -1,4 +1,5 @@
 import { Footer } from "@/components/footer"
+import { Navigation } from "./navigation"
 
 interface MainLayoutProps {
   children: React.ReactNode

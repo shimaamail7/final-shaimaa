@@ -1,25 +1,19 @@
-import { Navigation } from "@/components/navigation"
-import { HeroSection } from "@/components/hero-sections"
-import { ProductFilter } from "@/components/product-filter"
-import { AcutusSection } from "@/components/acutus-section"
-import { AcutusDescription } from "@/components/acutus-description"
-import { ProductGrid } from "@/components/product-grid"
-import { SingleVisionSection } from "@/components/single-vision-section"
-import { TransitionSection } from "@/components/transition-section"
+import ProductsHero from "@/components/ProductsHero"
+
 import { ContactSection } from "@/components/contact-section"
+import DiscoverLensesSection from "@/components/discover-lenses-section"
+import { FaqSection, faqs } from "@/components/faq-section"
 import { Footer } from "@/components/footer"
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-white">
+    <main className="min-h-screen bg-black">
 
-      <HeroSection />
-      <ProductFilter />
-      <AcutusSection />
-      <AcutusDescription />
-      <ProductGrid />
-      <SingleVisionSection />
-      <TransitionSection /> <ContactSection /> <Footer />
+
+      <DiscoverLensesSection />
+      <FaqSection faqs={faqs} />
+      <ContactSection />
+      <Footer />
     </main>
   )
 }

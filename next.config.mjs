@@ -7,6 +7,14 @@ const nextConfig = {
   // Enable image optimisation (WebP/AVIF auto-conversion)
   images: {
     formats: ["image/avif", "image/webp"],
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+        port: '',
+        pathname: '/**',
+      },
+    ],
   },
   // Aggressive static asset caching
   async headers() {

@@ -46,22 +46,7 @@ export function useStickySections(isReady: boolean = true) {
           invalidateOnRefresh: true,
         })
 
-        // 2. Add the visual fade-out and parallax timeline (Codrops style)
-        // This scrubs the brightness and vertical position as the section gets covered
-        gsap.timeline({
-          scrollTrigger: {
-            trigger: element,
-            start: "top top",
-            end: "+=100%",
-            scrub: true,
-          }
-        })
-        .to(element, {
-          ease: "none",
-          startAt: { filter: "brightness(100%) contrast(100%)" },
-          filter: "brightness(40%) contrast(120%)",
-          yPercent: -15,
-        }, 0)
+
       })
     })
 

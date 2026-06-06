@@ -3,7 +3,7 @@ import SplitLayoutHero from './SplitLayoutHero';
 export function AboutSection() {
   return (
     <SplitLayoutHero
-      id="about"
+     
       imageSrc="/eyewear-group.jpg"
       imageAlt="Diverse group of people wearing stylish eyeglasses"
       tagline={`We\nHelp See\nBetter`}

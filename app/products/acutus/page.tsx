@@ -1,18 +1,5 @@
 import type { Metadata } from "next"
-import { useRef } from "react"
-import gsap from "gsap"
-import { ScrollTrigger } from "gsap/ScrollTrigger"
-import { useGSAP } from "@gsap/react"
-
-gsap.registerPlugin(ScrollTrigger)
-import HeroSection from "./hero"
-import { HowItWorks } from "@/components/HowItWorks"
-import AcutusSeriesSection from "./series-section"
-import { ContactSection } from "@/components/contact-section"
-import ExpandableCardsSection from '@/components/Dialog'
-import EmbeddedGallery from '@/components/EmbeddedGallery'
-import DepthGallery from "@/app/gallery/DepthGallery"
-import { Footer } from "@/components/footer"
+import AcutusClient from "./AcutusClient"
 
 export const metadata: Metadata = {
   title: "ACUTUS | Optika",
@@ -21,59 +8,5 @@ export const metadata: Metadata = {
 }
 
 export default function AcutusPage() {
-  const galleryRef = useRef<HTMLDivElement>(null)
-  const depthGalleryRef = useRef<{ setProgress: (v: number) => void }>(null)
-
-  useGSAP(() => {
-    const target = galleryRef.current
-    if (!target) return
-
-    gsap.set(target, { opacity: 0 })
-
-    ScrollTrigger.create({
-      trigger: target,
-      start: "top top",
-      end: "+=300%",
-      pin: true,
-      scrub: true,
-      onUpdate: (self) => {
-        const progress = self.progress
-        const easedProgress = progress < 0.5
-          ? 2 * progress * progress
-          : 1 - Math.pow(-2 * progress + 2, 2) / 2
-        depthGalleryRef.current?.setProgress(easedProgress)
-      },
-      onEnter: () => gsap.to(target, { opacity: 1, duration: 0.6, ease: "power2.out" }),
-      onLeave: () => gsap.to(target, { opacity: 0, duration: 0.6, ease: "power2.in" }),
-      onEnterBack: () => gsap.to(target, { opacity: 1, duration: 0.6, ease: "power2.out" }),
-      onLeaveBack: () => gsap.to(target, { opacity: 0, duration: 0.6, ease: "power2.in" }),
-    })
-  }, { scope: galleryRef })
-
-  return (
-    <div className="relative min-h-screen bg-black text-white overflow-x-hidden">
-      <HeroSection />
-
-      <div ref={galleryRef} className="h-screen w-full overflow-hidden">
-        <DepthGallery ref={depthGalleryRef} />
-      </div>
-
-      <HowItWorks
-        title="How It Works"
-        tagline="From Prescription to Patient Seamlessly."
-        description="Our end-to-end workflow is engineered to minimize friction, reduce error, and ensure every lens meets the highest standards before it reaches your practice."
-        steps={[
-          "Order Input",
-          "Processing & Validation",
-          "Lens Customisation",
-          "Production",
-          "Delivery",
-        ]}
-        backgroundColor="#D1D1D1"
-        ruleColor="rgba(0,0,0,0.35)"
-      />
-      <ContactSection />
-      <Footer />
-    </div>
-  )
+  return <AcutusClient />
 }

@@ -45,7 +45,7 @@ const navLinksColumn2 = [
 export function Footer() {
     const logoRef = useRef<SVGSVGElement>(null)
     return (
-        <footer className="relative pt-5  px-4  md:pt-0 bg-black content-end-safe lg:px-25 2xl:px-48">
+        <footer className="relative pt-5  px-4 z-100  md:pt-0 bg-black content-end-safe lg:px-25 2xl:px-48">
             {/* Main footer content */}
             <div className="w-full pb-10 lg:pb-12 lg:pt-20  content-end-safe">
                 <div className="flex flex-col gap-12 lg:flex-row lg:justify-between lg:gap-20">

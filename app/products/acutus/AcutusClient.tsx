@@ -1,16 +1,33 @@
 'use client'
 
+import { useEffect } from "react"
+import "@/app/gallery.css"
 import HeroSection from "./hero"
 import { HowItWorks } from "@/components/HowItWorks"
 import { ContactSection } from "@/components/contact-section"
-import ScrollProductGallery from "@/components/gallery/ScrollProductGallery"
 import { Footer } from "@/components/footer"
+import { IrisCursor } from '@/components/gallery/iris-cursor'
+import { GalleryScene } from "@/components/gallery/gallery-scene"
+
+
 
 export default function AcutusClient() {
-  return (
+ useEffect(() => {
+    const html = document.documentElement
+    const body = document.body
+    html.classList.add("gallery-html")
+    body.classList.add("gallery-body")
+    return () => {
+      html.classList.remove("gallery-html")
+      body.classList.remove("gallery-body")
+    }
+  }, [])
+
+  return (<>      
+
     <div className="relative min-h-screen bg-black text-white overflow-x-hidden">
       <HeroSection />
-      <ScrollProductGallery />
+
       <HowItWorks
         title="How It Works"
         tagline="From Prescription to Patient Seamlessly."
@@ -27,6 +44,6 @@ export default function AcutusClient() {
       />
       <ContactSection />
       <Footer />
-    </div>
+    </div></>
   )
 }
