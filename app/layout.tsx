@@ -2,6 +2,8 @@ import type { Metadata } from 'next'
 import { Geist, Inter, Playfair_Display } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
+import { Navigation } from '@/components/navigation';
+
 
 
 const geist = Geist({
@@ -65,8 +67,8 @@ export default function RootLayout({
         />
       </head>
       {/* Apply the font variables to the body so they can be accessed anywhere */}
-      <body className={`${inter.className} ${geist.className}  ${playfair.variable} antialiased`} suppressHydrationWarning>
-
+      <body className={`${inter.className}  ${playfair.variable} antialiased`} suppressHydrationWarning>
+        <Navigation />
         {children}
         <Analytics />
 

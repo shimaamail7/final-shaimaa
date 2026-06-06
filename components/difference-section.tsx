@@ -1,33 +1,37 @@
-import Image from "next/image"
+"use client"
+
+import Image from "next/image";
 
 export function DifferenceSection() {
   return (
-    <section className="relative   flex min-h-[554px] h-screen w-full items-center justify-center bg-black px-4 py-20 sm:px-6 md:px-8 text-center overflow-hidden">
-      {/* Background Image */}
-      <div className="absolute inset-0 z-0">
+    <section id="difference" className="relative z-20 w-full h-screen overflow-hidden bg-black">
+      {/* <div className="absolute inset-0 w-full h-full">
         <Image
-          src="/difference-bg.jpg"
-          alt="Athlete wearing high-performance sports eyewear"
+          src="/home.jpeg"
+          alt="Difference background"
           fill
-          loading="eager"
-          className="object-cover object-center"
+          className="object-cover"
+          priority
           sizes="100vw"
         />
-        {/* Exact Figma overlay: #00000096 */}
-        <div className="absolute inset-0 bg-[#00000096]" />
-      </div>
+      </div> */}
 
-      {/* Text Content */}
-      <div className="relative z-10 mx-auto w-full max-w-[90vw] sm:max-w-4xl lg:max-w-5xl">
-        <h2
-          className="relative z-10 text-[32px] sm:text-[40px] md:text-[48px] lg:text-[52px] xl:text-[56px] font-bold leading-[98%] tracking-[-0.03em] text-white uppercase"
-          style={{ fontFamily: "var(--font-inter)" }}
-        >
-          FOR THOSE WHO SEE
-          <br />
-          THE DIFFERENCE
-        </h2>
-      </div>
+      {/* Fullscreen background video: autoplay, muted, loop, playsInline
+          Keep the commented Image above for fallback/reference. Replace
+          `/videos/difference.mp4` with your actual video in `public/`.
+      */}
+      <video
+        className="absolute inset-0 w-full h-full object-contain"
+        src="/home4.mp4"
+        autoPlay
+        muted
+        loop
+        playsInline
+        aria-hidden="true"
+      />
+
+      {/* Optional overlay to ensure readable content can be placed here */}
+      <div className="absolute inset-0 bg-black/20 pointer-events-none" />
     </section>
   )
 }

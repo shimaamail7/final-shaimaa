@@ -2,12 +2,13 @@
 
 import { useState, useEffect, useCallback } from "react"
 import dynamic from "next/dynamic"
-import { SnapScrollProvider } from "@/lib/snap-scroll-context"
+import { SnapScrollProvider, useSnapScroll } from "@/lib/snap-scroll-context"
 import { Loader } from "@/components/loader"
 
 import { PhilosophySection } from "@/components/philosophy-section"
 import { CraftSection } from "@/components/craft-section"
 import { InnovationSection } from "@/components/innovation-section"
+import { REEL_CRAFT_BEIGE } from "@/lib/reel-gradient-themes"
 import { BackgroundGradientAnimation } from "@/components/ui/background-gradient-animation"
 import { Logo } from "@/components/logo"
 import { WebGLErrorBoundary } from "@/components/webgl-error-boundary"
@@ -18,10 +19,12 @@ const GlassesCanvas = dynamic(
 )
 
 function MainContent({ isReady, onComplete }: { isReady: boolean; onComplete: () => void }) {
+  const { currentStage } = useSnapScroll()
+
   return (
     <main id="main-scroll-container" style={{ backgroundColor: "#000000" }}>
       {/* Global black gradient for Philosophy and Innovation */}
-      <div id="global-gradient-bg-dark" className="pointer-events-none fixed inset-0 z-0 overflow-hidden" style={{ width: '100%', height: '100vh' }}>
+      <div id="global-gradient-bg-dark" className="pointer-events-none fixed inset-0 z-0 overflow-hidden" style={{ width: '100%', height: '100vh', transition: 'opacity 1s ease-in-out', opacity: currentStage === 1 ? 0 : 1 }}>
         <BackgroundGradientAnimation
           gradientBackgroundStart="rgb(0, 0, 0)"
           gradientBackgroundEnd="rgb(0, 0, 0)"
@@ -36,10 +39,10 @@ function MainContent({ isReady, onComplete }: { isReady: boolean; onComplete: ()
       </div>
 
       {/* Global beige gradient for Craft */}
-      <div id="global-gradient-bg-light" className="pointer-events-none fixed inset-0 z-0 overflow-hidden" style={{ width: '100%', height: '100vh', opacity: 0 }}>
+      <div id="global-gradient-bg-light" className="pointer-events-none fixed inset-0 z-0 overflow-hidden" style={{ width: '100%', height: '100vh', transition: 'opacity 1s ease-in-out', opacity: currentStage === 1 ? 1 : 0 }}>
         <BackgroundGradientAnimation
-          gradientBackgroundStart="rgb(252, 245, 226)"
-          gradientBackgroundEnd="rgb(252, 245, 226)"
+          gradientBackgroundStart={REEL_CRAFT_BEIGE}
+          gradientBackgroundEnd={REEL_CRAFT_BEIGE}
           firstColor="180, 100, 255"
           secondColor="255, 120, 80"
           thirdColor="180, 100, 255"
@@ -51,29 +54,36 @@ function MainContent({ isReady, onComplete }: { isReady: boolean; onComplete: ()
       </div>
 
       {/* Logo */}
-      <div className="fixed flex items-center h-16 justify-between w-full  gap-6 top-8 px-6 z-50 md:px-10 lg:px-16 pointer-events-auto">
+      <div
+        className="fixed flex items-center h-16 justify-between w-full gap-6 top-8 px-6 z-50 md:px-10 lg:px-16 pointer-events-auto transition-colors duration-500"
+        style={{ color: currentStage === 1 ? "#1a1a2e" : "#ffffff" }}
+      >
         <a href="/" aria-label="Home">
-          <Logo className="w-20 md:w-28 gs-dynamic-text" fill="currentColor" />
+          <Logo className="w-20 md:w-28" fill="currentColor" />
         </a>
 
         <button
           onClick={onComplete}
-          className="font-inter text-xs uppercase tracking-[0.15em] transition-colors duration-300 border border-current px-4 py-1    gs-dynamic-text"
-          style={{ color: "currentColor", borderColor: "currentColor" }}
+          className="font-inter text-xs px-8 py-3 w-[165px] h-[53px] uppercase cursor-pointer tracking-[0.15em] transition-all duration-500 px-4 py-1 "
+          style={{
+            color: currentStage === 1 ? "#1a1a2e" : "#ffffff",
+            backgroundColor: currentStage === 1 ? "rgba(26, 26, 46, 0.08)" : "rgba(255, 255, 255, 0.15)",
+            borderColor: "transparent"
+          }}
           onMouseEnter={(e) => {
-            e.currentTarget.style.opacity = "0.7"
+            e.currentTarget.style.backgroundColor = currentStage === 1 ? "rgba(26, 26, 46, 0.15)" : "rgba(255, 255, 255, 0.25)"
           }}
           onMouseLeave={(e) => {
-            e.currentTarget.style.opacity = "1"
+            e.currentTarget.style.backgroundColor = currentStage === 1 ? "rgba(26, 26, 46, 0.08)" : "rgba(255, 255, 255, 0.15)"
           }}
-          aria-label="Skip to website"
+          aria-label="Skip  to site"
         >
-          Skip
+          skip to site
         </button>
       </div>
 
       <div className="relative" id="philosophy">
-        <div className="pointer-events-none fixed left-0 top-0 z-30 h-screen w-full">
+        <div className="pointer-events-none fixed inset-0 z-30 h-dvh w-full">
           <WebGLErrorBoundary onError={onComplete}>
             <GlassesCanvas
               isVisible={isReady}
@@ -89,7 +99,7 @@ function MainContent({ isReady, onComplete }: { isReady: boolean; onComplete: ()
         <CraftSection />
       </div>
 
-      <div className="relative" id="innovation">
+      <div className="relative z-[60] pointer-events-auto" id="innovation">
         <InnovationSection onComplete={onComplete} />
       </div>
 
@@ -129,9 +139,9 @@ export function ReelIntro({ onComplete }: { onComplete: () => void }) {
       {isLoading && <Loader onComplete={handleLoadingComplete} onReady={handleReady} />}
 
       <SnapScrollProvider stageCount={3} locked={isScrollLocked}>
-        <div className={`transition-opacity duration-500 ${showContent ? "opacity-100" : "opacity-0"}`}>
+        {showContent ? (
           <MainContent isReady={showContent} onComplete={onComplete} />
-        </div>
+        ) : null}
       </SnapScrollProvider>
     </>
   )

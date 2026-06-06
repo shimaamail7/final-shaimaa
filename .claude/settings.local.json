@@ -1,7 +1,25 @@
 {
   "permissions": {
     "allow": [
-      "Bash(git add *)"
+      "Bash(git add *)",
+      "Bash(pnpm lint *)",
+      "Bash(npx tsc *)",
+      "Bash(npx eslint *)",
+      "Bash(pnpm build *)",
+      "Bash(pnpm dev *)",
+      "Bash(curl *)",
+      "Bash(New-Item *)",
+      "Bash(git commit *)",
+      "mcp__context7__resolve-library-id",
+      "mcp__context7__query-docs",
+      "Bash(Read *)",
+      "Bash(git log *)",
+      "Bash(pnpm next *)",
+      "Bash(taskkill *)",
+      "PowerShell(Stop-Process *)",
+      "Bash(pnpm eslint *)",
+      "PowerShell(Get-NetTCPConnection *)",
+      "Bash(Remove-Item *)"
     ]
   }
 }

@@ -1,24 +1,16 @@
-import { ArrowDown } from "lucide-react"
-import Link from "next/link"
-import Image from "next/image"
+import React from 'react';
+import HeroCTA from './HeroCTA';
+import Tagline from './Tagline';
+import Headline from './Headline';
+import Description from './Description';
+import HeroBackground from './HeroBackground';
+import { HeroProps } from './HeroProps';
 
-export interface HeroSectionProps {
-  imageSrc?: string;
-  imageAlt?: string;
-  imagePosition?: string;
-  eyebrowText?: string;
-  title?: React.ReactNode;
-  description?: string;
-  ctaText?: string;
-  ctaHref?: string;
-}
-
-export function HeroSection({
-  imageSrc = "/hero.jpg",
-  imageAlt = "Premium optical lenses showcasing modern eyecare technology",
-  imagePosition = "top",
-  eyebrowText = "Exceptional Optical Solutions",
-  title = (
+const defaultConfig: Partial<HeroProps> = {
+  imageSrc: '/hero.jpg',
+  imageAlt: 'Premium optical lenses showcasing modern eyecare technology',
+  imagePosition: '50% 20%',
+  title: (
     <>
       HIGH-END
       <br />
@@ -29,83 +21,67 @@ export function HeroSection({
       EYECARE
     </>
   ),
-  description = "Optika delivers to you Premium Digital Lenses and Solutions manufactured to the highest standards.",
-  ctaText = "Learn More",
-  ctaHref = "#about"
-}: HeroSectionProps) {
+  description: 'Optika delivers to you Premium Digital Lenses and Solutions manufactured to the highest standards.',
+  ctaText: 'Learn More',
+  theme: 'light', size: 'lg',
+  TaglineclassaName: 'max-w-2'
+};
+
+// Sensible layout fallbacks — callers override these via config
+const LAYOUT_DEFAULTS = {
+  sectionClassName: 'lg:px-24 2xl:px-36 relative min-h-[70vh] [70vh] w-full overflow-hidden px-6',
+  containerClassName: 'relative mx-auto flex h-screen  2xl:h-[70vh] items-end justify-end  ml-0 px-0 sm:px-8 md:px-16 lg:px-24 xl:px-32 ',
+  containerStyle: { bottom: '8vh' } as React.CSSProperties,
+  textContainerClassName: 'z-10 flex flex-col   justify-center py-8 md:py-0 pl-0 lg:mr-10 2xl:pl-0 2xl:mr-50 lg:py-0',
+};
+
+const TEXT_ALIGN_MAP = {
+  left: 'text-left',
+  center: 'text-center',
+  right: 'text-right',
+} as const;
+
+
+export function HeroSection({ config = {} }: { config?: Partial<HeroProps> }) {
+  const props = { ...defaultConfig, ...config };
+
+  const sectionClassName = props.sectionClassName || LAYOUT_DEFAULTS.sectionClassName;
+  const containerClassName = props.containerClassName || LAYOUT_DEFAULTS.containerClassName;
+  const containerStyle = props.containerStyle || LAYOUT_DEFAULTS.containerStyle;
+  const textContainerClassName = props.textContainerClassName || LAYOUT_DEFAULTS.textContainerClassName;
+  const textAlignClass = TEXT_ALIGN_MAP[props.textAlign || 'left'];
+  const size = props.size || 'lg';
+
   return (
-    <section className=" relative min-h-screen w-full ">
-
-      {/* Hero Image - Positioned absolutely to start under the 64px top navigation */}
-      <div className="absolute top-0 min-h-screen inset-x-0 bottom-0">
-        <Image
-          src={imageSrc}
-          alt={imageAlt}
-          style={{ objectPosition: imagePosition }}
-          fill
-          className="object-cover"
-          priority
+    <section className={sectionClassName}>
+      {props.imageSrc && (
+        <HeroBackground
+          src={props.imageSrc}
+          alt={props.imageAlt || ''}
+          position={props.imagePosition || 'center'}
+          overlayClassName={props.overlayClassName}
         />
-      </div>
-
-      {/* Content Container */}
-      <div className="relative mx-auto flex min-h-screen max-w-[2560px] items-end ml-4   px-4   sm:px-6 md:px-8 lg:px-12 xl:px-16 2xl:px-20" style={{ bottom: '15vh' }}>
-        <div className="grid w-full grid-cols-1 gap-8 lg:grid-cols-2">
-          {/* Spacer for image on large screens */}
-          <div className="hidden lg:block" />
-
-          {/* Text Content */}
-          <div className="z-10 flex flex-col justify-center py-12 md:py-0 pl-0 lg:pl-20 lg:py-0">
-            {/* Eyebrow text */}
-            {eyebrowText && (
-              <p
-                className="mb-4 text-black/70 sm:mb-6 text-[9px] sm:text-[10px] lg:text-xs tracking-[0.11em] leading-[135%] font-playfair font-normal"
-              >
-                {eyebrowText}
-              </p>
-            )}
-
-            {/* Main Heading */}
-            {title && (
-              <h1
-                className="mb-6 text-black sm:mb-8 relative z-10 text-[32px] sm:text-[40px] md:text-[40px] lg:text-[50px] xl:text-[56px] font-bold leading-[98%] tracking-[-0.03em]"
-                style={{
-                  fontFamily: "var(--font-inter)",
-                }}
-              >
-                {title}
-              </h1>
-            )}
-
-            {/* Description */}
-            {description && (
-              <p
-                className="mb-8 max-w-md text-black/70 sm:mb-10 md:max-w-lg lg:max-w-md xl:max-w-lg text-[13px] sm:text-sm lg:text-base leading-[150%] tracking-[0.02em]"
-                style={{
-                  fontFamily: "var(--font-inter)",
-                  fontWeight: 400,
-                }}
-              >
-                {description}
-              </p>
-            )}
-
-            {/* CTA Button */}
-            {ctaText && ctaHref && (
-              <Link
-                href={ctaHref}
-                className="group inline-flex w-fit items-center gap-3 text-sm font-medium text-black transition-colors hover:text-gray-600 sm:text-base lg:text-[16px]"
-                style={{ fontFamily: "var(--font-inter)" }}
-              >
-                <span className="flex h-5 w-5 sm:h-6 sm:w-6 items-center justify-center bg-black text-white transition-colors group-hover:bg-gray-800">
-                  <ArrowDown className="h-3 w-3 sm:h-4 sm:w-4" />
-                </span>
-                <span>{ctaText}</span>
-              </Link>
-            )}
+      )}
+      <div className={containerClassName} style={containerStyle}>
+        <div className={textContainerClassName}>
+          <div className={textAlignClass}>
+            {props.tagline && <Tagline text={props.tagline} theme={props.theme} className={props.TaglineclassaName} />}
+            {props.title && <Headline theme={props.theme} size={props.size}>{props.title}</Headline>}
+            {props.description && <Description text={props.description} theme={props.theme} />}
           </div>
+          {props.customCta
+            ? props.customCta
+            : (props.ctaText && props.ctaHref && (
+              <HeroCTA
+                text={props.ctaText}
+                href={props.ctaHref}
+                className={props.ctaClassName}
+                variant={props.theme === 'dark' ? 'light' : 'dark'}
+              />
+            ))
+          }
         </div>
       </div>
     </section>
-  )
+  );
 }

@@ -6,7 +6,7 @@ export function PerformanceSection() {
       {/* Background Image with Dark Overlay */}
       <div className="absolute inset-0">
         <Image
-          src="/performance.png"
+          src="/pr.png"
           alt="Professional team in a modern office boardroom"
           fill
           className="object-cover opacity-60"

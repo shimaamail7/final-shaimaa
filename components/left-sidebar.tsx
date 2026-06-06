@@ -70,7 +70,7 @@ export function LeftSidebar({
                 {section.number}
               </span>
               <span
-                className="gs-dynamic-text font-sans text-xs font-medium uppercase tracking-[0.15em]"
+                className="gs-dynamic-text font-inter text-xs font-medium uppercase tracking-[0.15em]"
                 style={{
                   color: "#ffffff" // default white for Philosophy, GSAP overwrites to dark later
                 }}

@@ -16,6 +16,8 @@ export const BackgroundGradientAnimation = ({
   className,
   interactive = true,
   containerClassName,
+  id,
+  dataTheme,
 }: {
   gradientBackgroundStart?: string;
   gradientBackgroundEnd?: string;
@@ -30,6 +32,9 @@ export const BackgroundGradientAnimation = ({
   className?: string;
   interactive?: boolean;
   containerClassName?: string;
+  id?: string;
+  /** `data-theme` on root — toggled by GSAP (`craft` | `dark`) */
+  dataTheme?: string;
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const interactiveRef = useRef<HTMLDivElement>(null);
@@ -87,6 +92,8 @@ export const BackgroundGradientAnimation = ({
 
   return (
     <div
+      id={id}
+      data-theme={dataTheme}
       ref={containerRef}
       className={cn(
         "h-full w-full relative overflow-hidden top-0 left-0 bg-[linear-gradient(40deg,var(--gradient-background-start),var(--gradient-background-end))]",

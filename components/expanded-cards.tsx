@@ -2,255 +2,440 @@
 
 import { useState } from "react"
 import Image from "next/image"
-import { ArrowRight } from "lucide-react"
+import { ArrowRight, ArrowUpRight } from "lucide-react"
+import { cn } from "@/lib/utils"
 
-interface CardData {
-    id: number
-    number: string
-    title: string
-    subtitle: string
-    description: string
-    image: string
-    color: string
-    buttonText: string
+export interface LensCardData {
+  id: number
+  number: string
+  seriesLine: string
+  title: string
+  productType: string
+  description: string
+  features: string[]
+  image: string
 }
 
-const cardsData: CardData[] = [
+const LENS_IMAGES = [
+  "/acutus-plus.png",
+  "/model1.png",
+  "/about-optika2.jpg",
+  "/acutus-plus.png",
+  "/actushero.png",
+  "/Rectangle.png",
+  "/actushero.png",
+  "/model1.png",
+  "/about-optika.jpg",
+  "/hero.jpg",
+  "/transition.jpg",
+] as const
+
+function buildLensCards(): LensCardData[] {
+  const variants: Omit<LensCardData, "id" | "number" | "image">[] = [
     {
-        id: 1,
-        number: "01",
-        title: "FAYZE Vision",
-        subtitle: "See differently. / Live boldly.",
-        description:
-            'With Smooth Optics, there is a solution for the "eyear" effect that is often experienced with regular lenses in designs that are positioned very close to the face. Premium optics ensure unobstructed vision whether in busy streets, outdoor trails, or indoor corridors, adapt to your surroundings and ignite your perspective and greater confidence.',
-        image: "/about-optika2.jpg",
-        color: "bg-slate-700",
-        buttonText: "Explore Collection",
+      seriesLine: "Optika's Exclusive Lens Series",
+      title: "ACUTUS PLUS",
+      productType: "ORGANIC RX PROGRESSIVE",
+      description:
+        "ACUTUS PLUS is a premium, highly personalised progressive lens.",
+      features: [
+        "Dynamic vision",
+        "Wide distance fields",
+        "Ideal for outdoor activities",
+      ],
     },
     {
-        id: 2,
-        number: "02",
-        title: "Urban Style",
-        subtitle: "Modern elegance. / Timeless design.",
-        description:
-            "Experience the perfect fusion of contemporary fashion and classic sophistication. Our urban collection features sleek silhouettes and bold statements that transition seamlessly from day to night, boardroom to boulevard.",
-        image: "/images/fayze-hero.png",
-        color: "bg-rose-600",
-        buttonText: "Shop Now",
+      seriesLine: "Optika's Exclusive Lens Series",
+      title: "ACUTUS SMART",
+      productType: "DIGITAL SINGLE VISION",
+      description:
+        "Precision surfacing for crisp everyday clarity with minimal peripheral distortion.",
+      features: ["Sharp central vision", "Thin profile options", "Fast adaptation"],
     },
     {
-        id: 3,
-        number: "03",
-        title: "Sport Performance",
-        subtitle: "Push limits. / Break boundaries.",
-        description:
-            "Engineered for athletes who demand excellence. Advanced ventilation systems, impact-resistant frames, and precision-fit technology ensure optimal performance during your most intense activities.",
-        image: "/images/fayze-hero.png",
-        color: "bg-amber-500",
-        buttonText: "View Sports Line",
+      seriesLine: "Optika's Exclusive Lens Series",
+      title: "ACUTUS ELITE",
+      productType: "HIGH-INDEX VARIFOCAL",
+      description:
+        "Advanced corridor design balancing near and intermediate zones for demanding lifestyles.",
+      features: ["Smooth transitions", "Stable reading zone", "Premium coatings"],
     },
     {
-        id: 4,
-        number: "04",
-        title: "Eco Collection",
-        subtitle: "Sustainable vision. / Conscious choice.",
-        description:
-            "Crafted from recycled ocean plastics and bio-based materials, our eco-friendly line proves that sustainability and style are not mutually exclusive. Every purchase contributes to marine conservation efforts.",
-        image: "/images/fayze-hero.png",
-        color: "bg-emerald-500",
-        buttonText: "Go Green",
+      seriesLine: "Optika's Exclusive Lens Series",
+      title: "ACUTUS AIR",
+      productType: "ULTRA-LIGHT ORGANIC",
+      description:
+        "Featherweight blanks engineered for comfort without compromising optical performance.",
+      features: ["Reduced edge thickness", "Comfortable all-day wear", "Modern aesthetics"],
     },
-]
+    {
+      seriesLine: "Optika's Exclusive Lens Series",
+      title: "ACUTUS SHARP",
+      productType: "OFFICE PROGRESSIVE",
+      description:
+        "Optimised intermediate and near zones for screens, desks, and collaborative workspaces.",
+      features: ["Wide intermediate band", "Reduced neck tilt", "Screen clarity"],
+    },
+    {
+      seriesLine: "Optika's Exclusive Lens Series",
+      title: "ACUTUS DRIVE",
+      productType: "POLARIZED SUN RX",
+      description:
+        "Glare-controlled outdoor lens with faithful colour perception behind the wheel.",
+      features: ["Glare reduction", "True colour perception", "Durability outdoors"],
+    },
+    {
+      seriesLine: "Optika's Exclusive Lens Series",
+      title: "ACUTUS KIDS",
+      productType: "IMPACT-SAFE ORGANIC",
+      description:
+        "Tough yet light lenses tailored for active younger wearers and everyday safety.",
+      features: ["Impact-minded materials", "Easy-care surfaces", "Stable vision"],
+    },
+    {
+      seriesLine: "Optika's Exclusive Lens Series",
+      title: "ACUTUS NIGHT",
+      productType: "BLUE-LIGHT OPTIMIZED",
+      description:
+        "Designed for evening screen sessions with tuned transmission for visual comfort.",
+      features: ["Comfort under LEDs", "Reduced stray glare", "Balanced contrast"],
+    },
+    {
+      seriesLine: "Optika's Exclusive Lens Series",
+      title: "ACUTUS SPORT",
+      productType: "WRAP OPTIMIZED RX",
+      description:
+        "Compensation geometry for curved frames so motion stays sharp at every angle.",
+      features: ["Stable gaze during motion", "Wide field wrap", "Secure peripheral cues"],
+    },
+    {
+      seriesLine: "Optika's Exclusive Lens Series",
+      title: "ACUTUS READ",
+      productType: "NEAR-VISION BOOST",
+      description:
+        "Dedicated enhancement for sustained reading and fine-detail tasks at close range.",
+      features: ["Expanded near zone", "Comfortable posture", "Crisp small print"],
+    },
+    {
+      seriesLine: "Optika's Exclusive Lens Series",
+      title: "ACUTUS CUSTOM",
+      productType: "FREEFORM DIGITAL",
+      description:
+        "Fully personalised freeform computation mapped to frame fit and wearing posture.",
+      features: ["Individual optimisation", "Predictable performance", "Premium finishing"],
+    },
+  ]
+
+  return variants.map((v, i) => ({
+    id: i + 1,
+    number: String(i + 1).padStart(2, "0"),
+    image: LENS_IMAGES[i] ?? "/actushero.png",
+    ...v,
+  }))
+}
+
+const cardsData = buildLensCards()
+
+/** CustomForm lockup — scales to card width, no layout overflow */
+function CardBrandLogo({ className }: { className?: string }) {
+  return (
+    <div className={cn("w-[60%] max-w-[220px]  sm:max-w-[240px]", className)}>
+      <div className="relative h-9 w-[60%] sm:h-10">
+        <Image
+          src="/45.png"
+          alt="CustomForm"
+          fill
+          className="object-contain object-left"
+        />
+      </div>
+    </div>
+  )
+}
+
+/** Flex accordion: one panel grows (~65–70% on wide viewports); strips stay fixed width */
+const CARD_TRANSITION =
+  "transition-[flex-grow,flex-basis] duration-700 ease-[cubic-bezier(0.33,1,0.68,1)] will-change-[flex-grow]"
 
 export default function ExpandableCards() {
-    const [activeCard, setActiveCard] = useState<number>(1)
+  const [activeCard, setActiveCard] = useState<number>(1)
 
-    return (
-        <section className="min-h-screen bg-black flex items-center justify-center p-4 md:p-6 lg:p-8">
-            <div className="w-full max-w-[1400px] mx-auto">
-                {/* Desktop Layout */}
-                <div className="hidden md:flex h-[600px] lg:h-[650px] xl:h-[700px] 2xl:h-[750px] gap-2">
-                    {cardsData.map((card) => (
-                        <div
-                            key={card.id}
-                            onClick={() => setActiveCard(card.id)}
-                            className={`relative cursor-pointer overflow-hidden rounded-lg transition-all duration-500 ease-in-out ${activeCard === card.id
-                                ? "flex-[4]"
-                                : "flex-[0.5] hover:flex-[0.6]"
-                                }`}
-                        >
-                            {/* Collapsed State */}
-                            <div
-                                className={`absolute inset-0 ${card.color} transition-opacity duration-500 ${activeCard === card.id ? "opacity-0" : "opacity-100"
-                                    }`}
+  return (
+    <section className="flex min-h-screen h-screen flex-1  flex-col bg-white px-4 py-6 md:h-screen md:min-h-screen md:px-6 md:py-8 lg:px-8 lg:py-10">
+      <div className="mx-auto flex  min-h-screen w-full max-w-[1680px] flex-1 flex-col justify-start h-screen min-h-screen md:justify-center">
+        {/* Desktop — vertically centered in viewport; fixed height accordion */}
+        <div className="hidden lg:w-[93vw] 2xl:w-full mb-10   mx-auto flex-col overflow-hidden rounded-sm border-4 border-[#d4d4d4] bg-white p-2 md:flex lg:h-[85vh] md:p-2 2xl:h-[60vh]">
+          <div className="flex h-full min-h-0 w-full min-w-0 flex-1  gap-2 overflow-hidden ">
+            {cardsData.map((card) => {
+              const isActive = activeCard === card.id
+              return (
+                <div
+                  key={card.id}
+                  role="button"
+                  tabIndex={0}
+                  onClick={() => setActiveCard(card.id)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault()
+                      setActiveCard(card.id)
+                    }
+                  }}
+                  className={cn(
+                    "relative h-full min-h-0 cursor-pointer overflow-hidden bg-white",
+                    CARD_TRANSITION,
+                    isActive
+                      ? "min-w-0 flex-1 basis-0 shadow-[inset_0_0_0_1px_rgba(0,0,0,0.06)]"
+                      : "w-[46px] shrink-0 grow-0 basis-[46px] hover:opacity-[0.97] lg:w-[52px] lg:basis-[52px]",
+                  )}
+                >
+                  {/* Collapsed — black strip, index top, bold title + regular subtitle vertical, circle ↗ bottom */}
+                  <div
+                    className={cn(
+                      "absolute inset-0 flex flex-col justify-between bg-black px-2 py-5 transition-opacity duration-500 ease-out sm:py-6",
+                      isActive ? "pointer-events-none opacity-0 delay-0" : "opacity-100 delay-75",
+                    )}
+                  >
+                    <span
+                      className="text-[12px] font-medium tabular-nums text-white"
+                      style={{ fontFamily: "var(--font-playfair)" }}
+                    >
+                      {card.number}
+                    </span>
+                    <div className="flex min-h-0 flex-1 flex-row items-center justify-center gap-4 py-3">
+                      <span
+                        className="max-h-[min(380px,50vh)] text-[11px] font-bold uppercase leading-snug tracking-[0.14em] text-white sm:text-[12px]"
+                        style={{
+                          writingMode: "vertical-rl",
+                          transform: "rotate(180deg)",
+                        }}
+                      >
+                        {card.title}
+                      </span>
+                      <span
+                        className="max-h-[min(340px,46vh)] text-[9px] font-normal uppercase leading-normal tracking-[0.12em] text-white/90 sm:text-[10px]"
+                        style={{
+                          writingMode: "vertical-rl",
+                          transform: "rotate(180deg)",
+                        }}
+                      >
+                        {card.productType}
+                      </span>
+                    </div>
+                    <div className="flex justify-center pb-0.5">
+                      <span className="flex h-9 w-9 items-center justify-center rounded-full border border-white bg-black">
+                        <ArrowUpRight className="h-4 w-4 text-white" strokeWidth={2} />
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Expanded — white + image (~half of expanded card) */}
+                  <div
+                    className={cn(
+                      "absolute inset-0 flex bg-white transition-opacity duration-500 ease-out",
+                      isActive
+                        ? "pointer-events-auto opacity-100 delay-100"
+                        : "pointer-events-none opacity-0 delay-0",
+                    )}
+                  >
+                    <div className="flex h-full w-full min-w-0">
+                      {/* Content 45% | Image 55% of expanded card width */}
+                      <div className="flex h-full min-h-0 w-[45%] shrink-0 flex-col justify-end overflow-hidden bg-white px-5 py-7 sm:px-6 sm:py-8 lg:px-8 lg:py-3 xl:px-10 xl:py-10">
+                        <div className="flex w-full min-w-0 max-w-full flex-col gap-6 overflow-hidden lg:gap-7">
+                          {/* Index + series — one block */}
+                          <div className="flex shrink-0 flex-col items-start gap-2.5">
+                            <span
+                              className="text-[16px] font-semibold tabular-nums leading-none text-black lg:text-[17px]"
+                              style={{ fontFamily: "var(--font-playfair)" }}
                             >
-                                <div className="h-full flex flex-col justify-between p-4 lg:p-6">
-                                    <span className="text-white/80 font-light text-sm lg:text-base tracking-wider">
-                                        {card.number}
-                                    </span>
-                                    <div className="flex items-center justify-center flex-1">
-                                        <span
-                                            className="text-white font-medium text-base lg:text-lg tracking-wide"
-                                            style={{
-                                                writingMode: "vertical-rl",
-                                                textOrientation: "mixed",
-                                                transform: "rotate(180deg)",
-                                            }}
-                                        >
-                                            {card.title}
-                                        </span>
-                                    </div>
-                                    <div className="w-8 h-8 lg:w-10 lg:h-10 rounded-full border border-white/30 flex items-center justify-center">
-                                        <ArrowRight className="w-4 h-4 lg:w-5 lg:h-5 text-white/80 -rotate-45" />
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* Expanded State */}
-                            <div
-                                className={`absolute inset-0 bg-slate-900 transition-opacity duration-500 ${activeCard === card.id ? "opacity-100" : "opacity-0"
-                                    }`}
+                              {card.number}
+                            </span>
+                            <p
+                              className="max-w-[18rem] text-[11px] font-normal leading-[1.5] tracking-[0.02em] text-black lg:max-w-[20rem] lg:text-[12px]"
+                              style={{ fontFamily: "var(--font-playfair)" }}
                             >
-                                <div className="h-full flex">
-                                    {/* Left Content Panel */}
-                                    <div className="w-[45%] h-full flex flex-col justify-between p-6 lg:p-8 xl:p-10 bg-slate-800/90">
-                                        <div>
-                                            <span className="text-white/60 font-light text-sm lg:text-base tracking-wider block mb-6 lg:mb-8">
-                                                {card.number}
-                                            </span>
-                                            <div className="mb-4 lg:mb-6">
-                                                <div className="w-10 h-10 lg:w-12 lg:h-12 rounded-full bg-slate-700 flex items-center justify-center mb-4 lg:mb-6">
-                                                    <span className="text-white text-xs lg:text-sm font-medium">
-                                                        FAYZE
-                                                    </span>
-                                                </div>
-                                                <h3 className="text-white text-lg lg:text-xl xl:text-2xl font-semibold mb-2">
-                                                    {card.title}
-                                                </h3>
-                                                <p className="text-white/60 text-xs lg:text-sm tracking-wide">
-                                                    {card.subtitle}
-                                                </p>
-                                            </div>
-                                        </div>
+                              {card.seriesLine}
+                            </p>
+                          </div>
 
-                                        <div>
-                                            <p className="text-white/70 text-xs lg:text-sm leading-relaxed mb-6 lg:mb-8">
-                                                {card.description}
-                                            </p>
-                                            <button className="group flex items-center gap-2 text-white text-xs lg:text-sm font-medium hover:gap-3 transition-all duration-300">
-                                                <span className="uppercase tracking-wider">
-                                                    {card.buttonText}
-                                                </span>
-                                                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                                            </button>
-                                        </div>
-                                    </div>
+                          <h3 className="shrink-0 font-inter text-[clamp(1.65rem,2.4vw,2.35rem)] font-bold uppercase leading-[1.05] tracking-[-0.02em] text-black">
+                            {card.title}
+                          </h3>
+                          <p className="shrink-0 font-inter text-[10px] font-medium uppercase tracking-[0.2em] text-black lg:text-[11px]">
+                            {card.productType}
+                          </p>
+                          <p className="shrink-0 font-inter text-[13px] font-normal leading-[1.65] text-black lg:text-[14px]">
+                            {card.description}
+                          </p>
 
-                                    {/* Right Image Panel */}
-                                    <div className="w-[55%] h-full relative">
-                                        <Image
-                                            src={card.image}
-                                            alt={card.title}
-                                            fill
-                                            className="object-cover"
-                                            priority={card.id === 1}
-                                        />
-                                    </div>
-                                </div>
-                            </div>
+                          <ul className="shrink-0 space-y-2.5 overflow-hidden">
+                            {card.features.map((f) => (
+                              <li
+                                key={f}
+                                className="flex items-start gap-2.5 font-inter text-[12px] font-normal leading-[1.5] lg:text-[13px]"
+                                style={{ color: "#A0A0A0" }}
+                              >
+                                <span
+                                  className="mt-[0.4rem] h-1 w-1 shrink-0 rounded-full"
+                                  style={{ backgroundColor: "#A0A0A0" }}
+                                />
+                                {f}
+                              </li>
+                            ))}
+                          </ul>
+
+                          <div className="shrink-0">
+                            <CardBrandLogo />
+                          </div>
+
+                          <button
+                            type="button"
+                            data-lens-explore
+                            data-lens-id={card.id}
+                            className="group flex w-fit shrink-0 items-center gap-2.5 font-inter text-[12px] font-medium tracking-normal text-black transition-colors hover:text-neutral-600"
+                          >
+                            Explore Product Details
+                            <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" strokeWidth={2} />
+                          </button>
                         </div>
-                    ))}
-                </div>
+                      </div>
 
-                {/* Tablet and Mobile Layout */}
-                <div className="md:hidden flex flex-col gap-3">
-                    {cardsData.map((card) => (
-                        <div
-                            key={card.id}
-                            onClick={() => setActiveCard(activeCard === card.id ? 0 : card.id)}
-                            className={`relative cursor-pointer overflow-hidden rounded-lg transition-all duration-500 ease-in-out ${activeCard === card.id ? "h-[450px] sm:h-[500px]" : "h-[80px]"
-                                }`}
+                      <div className="relative h-full w-[55%] min-w-0 shrink-0 bg-[#e8e8e8]">
+                        <Image
+                          src={card.image}
+                          alt=""
+                          fill
+                          className="object-cover object-[center_25%]"
+                          sizes="(max-width: 1536px) 55vw, 820px"
+                          priority={card.id === 1}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        </div>
+
+        {/* Mobile — stacked accordion (page scrolls; no inner scroll) */}
+        <div className="w-full shrink-0 overflow-hidden rounded-sm border border-[#d4d4d4] bg-white md:hidden">
+          {cardsData.map((card) => {
+            const isActive = activeCard === card.id
+            return (
+              <div key={card.id} className="border-b border-neutral-200 last:border-b-0">
+                <button
+                  type="button"
+                  onClick={() => setActiveCard(isActive ? 1 : card.id)}
+                  className={cn(
+                    "flex w-full items-center justify-between gap-3 px-4 py-4 text-left transition-colors",
+                    isActive ? "bg-white" : "bg-black",
+                  )}
+                >
+                  <span
+                    className={cn(
+                      "font-medium tabular-nums",
+                      isActive ? "text-neutral-900" : "text-white",
+                    )}
+                    style={{ fontFamily: "var(--font-playfair)" }}
+                  >
+                    {card.number}
+                  </span>
+                  <span
+                    className={cn(
+                      "flex-1 truncate text-sm font-semibold uppercase tracking-wide",
+                      isActive ? "text-neutral-900" : "text-white",
+                    )}
+                  >
+                    {card.title}
+                  </span>
+                  <span
+                    className={cn(
+                      "flex h-9 w-9 shrink-0 items-center justify-center rounded-full border",
+                      isActive ? "border-neutral-300 bg-neutral-100" : "border-white/40",
+                    )}
+                  >
+                    <ArrowUpRight
+                      className={cn(
+                        "h-4 w-4 transition-transform",
+                        isActive ? "rotate-90 text-neutral-900" : "text-white",
+                      )}
+                    />
+                  </span>
+                </button>
+                <div
+                  className={cn(
+                    "overflow-hidden bg-white transition-[max-height] duration-700 ease-[cubic-bezier(0.33,1,0.68,1)]",
+                    isActive ? "max-h-[1200px]" : "max-h-0",
+                  )}
+                >
+                  <div className="border-t border-neutral-200 px-5 pb-6 pt-5 text-left">
+                    <div className="flex flex-col gap-6">
+                      <div className="flex flex-col items-start gap-2">
+                        <span
+                          className="text-[15px] font-semibold tabular-nums text-black"
+                          style={{ fontFamily: "var(--font-playfair)" }}
                         >
-                            {/* Collapsed State - Mobile */}
-                            <div
-                                className={`absolute inset-0 ${card.color} transition-opacity duration-500 ${activeCard === card.id ? "opacity-0" : "opacity-100"
-                                    }`}
-                            >
-                                <div className="h-full flex items-center justify-between px-5">
-                                    <div className="flex items-center gap-4">
-                                        <span className="text-white/80 font-light text-sm tracking-wider">
-                                            {card.number}
-                                        </span>
-                                        <span className="text-white font-medium text-base tracking-wide">
-                                            {card.title}
-                                        </span>
-                                    </div>
-                                    <div className="w-10 h-10 rounded-full border border-white/30 flex items-center justify-center">
-                                        <ArrowRight
-                                            className={`w-5 h-5 text-white/80 transition-transform duration-300 ${activeCard === card.id ? "rotate-90" : "rotate-0"
-                                                }`}
-                                        />
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* Expanded State - Mobile */}
-                            <div
-                                className={`absolute inset-0 bg-slate-900 transition-opacity duration-500 ${activeCard === card.id ? "opacity-100" : "opacity-0"
-                                    }`}
-                            >
-                                <div className="h-full flex flex-col">
-                                    {/* Image Section */}
-                                    <div className="h-[55%] relative">
-                                        <Image
-                                            src={card.image}
-                                            alt={card.title}
-                                            fill
-                                            className="object-cover"
-                                            priority={card.id === 1}
-                                        />
-                                        <div className="absolute top-4 left-4">
-                                            <span className="text-white/80 font-light text-sm tracking-wider">
-                                                {card.number}
-                                            </span>
-                                        </div>
-                                    </div>
-
-                                    {/* Content Section */}
-                                    <div className="h-[45%] bg-slate-800/90 p-5 flex flex-col justify-between">
-                                        <div>
-                                            <div className="flex items-center gap-3 mb-3">
-                                                <div className="w-8 h-8 rounded-full bg-slate-700 flex items-center justify-center">
-                                                    <span className="text-white text-[10px] font-medium">
-                                                        FAYZE
-                                                    </span>
-                                                </div>
-                                                <div>
-                                                    <h3 className="text-white text-base font-semibold">
-                                                        {card.title}
-                                                    </h3>
-                                                    <p className="text-white/60 text-xs tracking-wide">
-                                                        {card.subtitle}
-                                                    </p>
-                                                </div>
-                                            </div>
-                                            <p className="text-white/70 text-xs leading-relaxed line-clamp-4">
-                                                {card.description}
-                                            </p>
-                                        </div>
-                                        <button className="group flex items-center gap-2 text-white text-xs font-medium hover:gap-3 transition-all duration-300 mt-3">
-                                            <span className="uppercase tracking-wider">
-                                                {card.buttonText}
-                                            </span>
-                                            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    ))}
+                          {card.number}
+                        </span>
+                        <p
+                          className="text-[11px] font-normal leading-relaxed tracking-[0.02em] text-black"
+                          style={{ fontFamily: "var(--font-playfair)" }}
+                        >
+                          {card.seriesLine}
+                        </p>
+                      </div>
+                      <h3 className="font-inter text-[1.35rem] font-bold uppercase leading-tight tracking-tight text-black">
+                        {card.title}
+                      </h3>
+                      <p className="font-inter text-[10px] font-medium uppercase tracking-[0.2em] text-black">
+                        {card.productType}
+                      </p>
+                      <p className="font-inter text-[13px] leading-relaxed text-black">
+                        {card.description}
+                      </p>
+                      <ul className="space-y-2.5">
+                        {card.features.map((f) => (
+                          <li
+                            key={f}
+                            className="flex items-start gap-2 text-[12px] leading-snug"
+                            style={{ color: "#A0A0A0" }}
+                          >
+                            <span
+                              className="mt-[0.4rem] h-1 w-1 shrink-0 rounded-full"
+                              style={{ backgroundColor: "#A0A0A0" }}
+                            />
+                            {f}
+                          </li>
+                        ))}
+                      </ul>
+                      <div>
+                        <CardBrandLogo />
+                      </div>
+                      <div className="relative aspect-[5/3] max-h-[200px] w-full overflow-hidden rounded-sm bg-neutral-200">
+                        <Image
+                          src={card.image}
+                          alt=""
+                          fill
+                          className="object-cover"
+                          sizes="(max-width: 768px) 100vw, 400px"
+                        />
+                      </div>
+                      <button
+                        type="button"
+                        data-lens-explore
+                        data-lens-id={card.id}
+                        className="group flex w-fit items-center gap-2.5 font-inter text-[12px] font-medium text-black"
+                      >
+                        Explore Product Details
+                        <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                      </button>
+                    </div>
+                  </div>
                 </div>
-            </div>
-        </section>
-    )
+              </div>
+            )
+          })}
+        </div>
+      </div>
+    </section>
+  )
 }

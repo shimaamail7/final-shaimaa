@@ -3,80 +3,45 @@
 export function InnovationSection({ onComplete }: { onComplete?: () => void }) {
   return (
     <section
-      id="innovation"
-      className="relative flex min-h-screen items-start md:items-center justify-center"
+      className="reel-stage flex min-h-dvh items-start md:items-center"
       style={{ backgroundColor: "transparent" }}
     >
-      {/* 
-        Global background gradient handled gracefully in page.tsx 
-      */}
-      {/*
-        Layout: model occupies the left ~55%, text block is right-aligned to the right ~45%.
-        On mobile: stacked, text at top.
-      */}
-      <div className="relative  max-w-xl z-40 h-[95vh] md:min-h-auto ml-auto flex w-full flex-col items-center justify-between md:justify-center pt-[20vh] pb-10 md:px-3 px-10 md:w-1/2 md:items-end md:justify-center md:pt-0 md:pb-0 md:pr-16 lg:pr-24">
-        <div>
+      <div className="reel-stage-inner reel-stage-inner--split w-full">
+        <div aria-hidden className="min-h-0 md:min-h-dvh" />
+
+        <div className="reel-stage-copy lg:ml-10 reel-stage-copy--start max-w-2xl relative z-1000">
           <p
-            className="gs-scene-3-sub gs-dynamic-text-light mb-6 font-sans text-xs font-medium uppercase self-start tracking-widest md:text-sm"
-            style={{
-              color: "#e5e7eb",
-              letterSpacing: "0.25em",
-              textAlign: "left",
-            }}
+            className="gs-scene-3-sub text-gray-100  2xl:mb-8 mb-4 font-playfair 2xl:text-[20px] text-[16px] font-medium uppercase leading-[1.36] tracking-[0.11em]"
           >
-            Innovation
+            Our Value
           </p>
           <h2
-            className="gs-scene-3-title gs-dynamic-text mb-4 font-sans text-6xl font-black uppercase tracking-tighter md:text-7xl lg:text-8xl"
-            style={{
-              fontWeight: 900,
-              color: "#ffffff",
-              letterSpacing: "-0.03em",
-              lineHeight: 0.92,
-              textAlign: "right",
-            }}
+            className="gs-scene-3-title gs-dynamic-text  2xl:mb-8 mb-4 font-inter !text-white 2xl:text-[64px]  lg:text-[48px] text-[32px]  font-bold uppercase leading-[1.2] tracking-[-0.04em]"
+
           >
-            TIMELESS
-          </h2></div>
-        <div className="flex flex-col items-start md:items-end">
-
-          {/* Sub-headline */}
-
-
-          {/* Body */}
+            Commitment to Excellence
+          </h2>
           <p
-            className="gs-scene-3-p gs-dynamic-text-light mb-10 font-sans  text-sm leading-relaxed "
-            style={{
-              maxWidth: "40ch",
-              color: "#9ca3af",
-              lineHeight: 1.75,
-              textAlign: "right",
-            }}
+            className="gs-scene-3-p text-gray-200 max-w-xl  2xl:mb-16 mb-8 max-w-[40ch] font-inter 2xl:text-[20px] text-[16px] font-medium leading-[1.5] tracking-[0.02em]"
+            style={{ color: "#d0c4b7" }}
           >
-            Stand out in any crowd. Engineered for those who define the standard,
-            never follow it — where optical precision meets iconic design heritage.
+           To Standout We provide lenses that define standers,
+for those who demand Nothing but Excellence
           </p>
-
-          {/* CTA button — pill shaped, white bg, black text */}
           <button
-            className="gs-scene-3-btn relative z-50 pointer-events-auto cursor-pointer group font-sans text-xs font-bold uppercase tracking-widest transition-transform duration-200 hover:scale-105 active:scale-95"
+            type="button"
+            className="gs-scene-3-btn w-full cursor-pointer relative z-50 pointer-events-auto font-inter text-[20px] font-normal uppercase leading-none tracking-normal transition-transform duration-200 hover:scale-105"
             style={{
               backgroundColor: "#ffffff",
               color: "#000000",
               border: "none",
-              borderRadius: "9999px",
-              padding: "14px 36px",
-              letterSpacing: "0.15em",
-              cursor: "pointer",
+              padding: "16px 32px", cursor: "pointer"
             }}
-            onClick={() => {
-              if (onComplete) {
-                onComplete()
-              }
-            }}
+            onClick={() => onComplete?.()}
           >
             Start Experience
-          </button></div>
+          </button>
+        </div>
       </div>
     </section>
   )
