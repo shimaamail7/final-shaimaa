@@ -146,12 +146,19 @@ export function GalleryScene() {
   }
 
   return (
-    <section
-      className="gallery-scene"
-      id="gallery-scene"
-      aria-label="Product gallery"
-      ref={sceneRef}
-    >
+    <>
+      <header className="intro">
+        <p className="intro__eyebrow">Collection 2026</p>
+        <h1>Scroll to explore</h1>
+        <p className="intro__hint">Vertical scroll drives the gallery sideways</p>
+      </header>
+
+      <section
+        className="gallery-scene"
+        id="gallery-scene"
+        aria-label="Product gallery"
+        ref={sceneRef}
+      >
       <div
         className="gallery-scene__bg"
         id="gallery-bg"
@@ -222,5 +229,6 @@ export function GalleryScene() {
         <span className="progress__bar" id="progress-bar" ref={progressBarRef} />
       </div>
     </section>
+    </>
   )
 }
