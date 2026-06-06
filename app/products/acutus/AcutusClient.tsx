@@ -28,6 +28,9 @@ export default function AcutusClient() {
     <div className="relative min-h-screen bg-black text-white overflow-x-hidden">
       <HeroSection />
 
+      <IrisCursor />
+      <GalleryScene />
+
       <HowItWorks
         title="How It Works"
         tagline="From Prescription to Patient Seamlessly."
